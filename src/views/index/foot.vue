@@ -37,9 +37,9 @@
     </div>
 <!--滚动显示消息-->
     <!--<div class="marquee_box">-->
-      <!--<ul class="marquee_list" :style="{ top: -num + 'px'}" :class="{marquee_top:num}">-->
+      <!--<ul class="marquee_list" :style="{ left: -num + 'px'}" :class="{marquee_top:num}">-->
         <!--&lt;!&ndash; 当显示最后一条的时候（num=0转换布尔类型为false）去掉过渡效果&ndash;&gt;-->
-        <!--<li v-for="(item, index) in marqueeList" >-->
+        <!--<li v-for="(item, index) in marqueeList" style="float: left;">-->
           <!--<span>{{item.name}}</span>-->
         <!--</li>-->
       <!--</ul>-->
@@ -105,16 +105,16 @@
         animate:false,
         marqueeList: [
           {
-            name:'1军',
+            name:'111111军',
           },
           {
-            name:'2军',
+            name:'21111111军',
           },
           {
-            name:'3军',
+            name:'311111111军',
           },
           {
-            name:'4军',
+            name:'411111221军',
           }
         ]
 //        connectTime:0
@@ -240,6 +240,7 @@
         this.marqueeList.push(this.marqueeList[0]);
         var max = this.marqueeList.length;
         var that = this;
+        let marqueetimer=0
         marqueetimer =  setInterval(function(){
           num++;
           if(num>=max ){
@@ -430,7 +431,7 @@
     left: 0;
     width:80%;
   }
-  .marquee_top{transition: top 0.5s ;}/*关键样式*/
+  .marquee_top{transition: left 0.5s ;}/*关键样式*/
   .marquee_list li{
     height: 30px;/*关键样式*/
     line-height: 30px;/*关键样式*/
