@@ -105,183 +105,179 @@
 </template>
 
 <script type="text/babel">
-  import httpserver from '../../utils/http.js';
-  import api from '../../utils/api.js';
+import httpserver from "../../utils/http.js";
+import api from "../../utils/api.js";
 
-
-  export default {
-    data() {
-      return {
-        centerDialogVisible:false,
-        productionOrderNum: '',
-        tableData: [],
-        gridData: [],
-        proinfo: {},
-        plannedQty: 0,
-        code: '',
-        productCount: 0,
-        dialogTableVisible: false,
-        currentRow: null,
-        count:null,
-        serialPort:'',
+export default {
+  data() {
+    return {
+      centerDialogVisible: false,
+      productionOrderNum: "",
+      tableData: [],
+      gridData: [],
+      proinfo: {},
+      plannedQty: 0,
+      code: "",
+      productCount: 0,
+      dialogTableVisible: false,
+      currentRow: null,
+      count: null,
+      serialPort: ""
+    };
+  },
+  beforeRouteLeave(to, from, next) {
+    this.closeCom();
+    next();
+  },
+  created() {
+    this.getMachiningProductionQueue();
+  },
+  mounted() {
+    this.openCom();
+  },
+  methods: {
+    openCom() {
+      try {
+        let _this = this;
+        let port = new SerialPort(
+          JSON.parse(window.localStorage.getItem("serialPort")).port,
+          { autoOpen: false }
+        );
+        let Readline = SerialPort.parsers.Readline;
+        let parser = new Readline();
+        port.pipe(parser);
+        port.open(function(error) {
+          if (error) {
+            return console.log("Error opening port:", error.message);
+          } else {
+            this.$message({
+              message: "窗口打开成功",
+              type: "success"
+            });
+          }
+        });
+        parser.on("data", function(data) {
+          _this.code = data;
+        });
+        _this.serialPort = port;
+      } catch (err) {
+        // console.log(err);
+      } finally {
+        this.$message({
+          message: "串口打开失败",
+          type: "error"
+        });
       }
     },
-    beforeRouteLeave(to, from, next) {
-      this.closeCom();
-      next()
-    },
-    created() {
-      this.getMachiningProductionQueue();
-    },
-    mounted() {
-      this.openCom();
-    },
-    methods: {
-      openCom() {
-        try {
+    closeCom() {
+      try {
+        if (this.serialPort.isOpen) {
           let _this = this;
-          let port = new SerialPort(JSON.parse(window.localStorage.getItem('serialPort')).port, {autoOpen: false});
-          let Readline = SerialPort.parsers.Readline;
-          let parser = new Readline();
-          port.pipe(parser);
-          port.open(function (error) {
-            if (error) {
-              return console.log("Error opening port:", error.message);
+          _this.serialPort.close(function(err) {
+            if (err) {
+              console.log(err);
             } else {
-              console.log("串口打开成功");
+              console.log("串口关闭成功");
             }
           });
-          parser.on('data', function (data) {
-            _this.code = data;
-          });
-          _this.serialPort = port;
         }
-        catch (err) {
-          // console.log(err);
-        } finally {
-          this.$message({
-            message:'窗口打开失败',
-            type:'error'
-          });
-        }
-
-      },
-      closeCom() {
-        try {
-          if (this.serialPort.isOpen) {
-            let _this = this;
-            _this.serialPort.close(function (err) {
-              if (err) {
-                console.log(err);
-              } else {
-                console.log("串口关闭成功");
-              }
-            })
-          }
-        }
-        catch (err) {
-          // console.log(err);
-        } finally {
-          this.$message({
-            message:'窗口关闭失败',
-            type:'error'
-          });
-        }
-      },
-      setCurrent(row) {
-        this.$refs.table.setCurrentRow(row)
-      },
-      validplannedQty(){
-        if((this.productCount+this.count)<this.plannedQty){
-
-          this.validMachiningProductRecord();
-        }else{
-          this.centerDialogVisible=true;
-        }
-      },
-      continueON(){
-        this.centerDialogVisible = false;
+      } catch (err) {
+        // console.log(err);
+      } finally {
+        this.$message({
+          message: "窗口关闭失败",
+          type: "error"
+        });
+      }
+    },
+    setCurrent(row) {
+      this.$refs.table.setCurrentRow(row);
+    },
+    validplannedQty() {
+      if (this.productCount + this.count < this.plannedQty) {
         this.validMachiningProductRecord();
-      },
-      onFinish(){
-        this.centerDialogVisible = false;
-        let body={
-          productionOrderNum: this.productionOrderNum
-        };
-        this.$confirm('确认完成该工单？')
-          .then(_ => {
-            httpserver(api.updateMachiningProduction,body).then((res)=>{
-              if(res.data.returnCode=="0"){
-                this.getMachiningProductionQueue();
-              }
-            })
-          })
-          .catch(_ => {});
-      },
-      validMachiningProductRecord() {
-        let loc = JSON.parse(window.localStorage.getItem('terminal'));
-        let body = {
-          workStationCode: loc.workStationCode,
-          scanCode: this.code,
-          productionOrderNum: this.productionOrderNum,
-          qty:this.count
-        };
-        console.log(this.count);
-        httpserver(api.validMachiningProductRecord, body)
-          .then((response) => {
-            console.log(response);
-            if (response.data.returnCode == '0') {
-              // this.productCount=this.productCount+this.count;
+      } else {
+        this.centerDialogVisible = true;
+      }
+    },
+    continueON() {
+      this.centerDialogVisible = false;
+      this.validMachiningProductRecord();
+    },
+    onFinish() {
+      this.centerDialogVisible = false;
+      let body = {
+        productionOrderNum: this.productionOrderNum
+      };
+      this.$confirm("确认完成该工单？")
+        .then(_ => {
+          httpserver(api.updateMachiningProduction, body).then(res => {
+            if (res.data.returnCode == "0") {
               this.getMachiningProductionQueue();
             }
-          })
-      },
-      getHistoryInfo() {
-        this.dialogTableVisible = true;
-        let loc = JSON.parse(window.localStorage.getItem('terminal'));
-        let body = {
-          workStationCode: loc.workStationCode,
-          pageNo: "1",
-          pageSize: "1"
-        };
-        httpserver(api.getHistoryInfo, body)
-          .then((response) => {
-            let resData = response.data.data;
-            this.gridData = resData.productionStnRecords;
-          })
-      },
-      getMachiningProductionQueue: function () {
-        let loc = JSON.parse(window.localStorage.getItem('terminal'));
-        let body = {
-          workCenterCode: loc.workCenterCode,
-          endRow: 4
-        };
-        httpserver(api.getMachiningProductionQueue, body)
-          .then((res) => {
-            this.tableData = res.data.data;
-          })
-      },
-      handleCurrentChange(val, old) {
-        if (val != null) {
-          this.currentRow = val;
-          this.proinfo = val;
-          this.productCount = this.currentRow.scanQty;
-          this.plannedQty = this.currentRow.plannedQty
-          this.productionOrderNum = this.currentRow.productionOrderNum;
-        } else {
-          this.tableData.forEach((value, index, table) => {
-            if (table[index].productionOrderNum == old.productionOrderNum) {
-              this.setCurrent(this.tableData[index])
-            }
-          })
+          });
+        })
+        .catch(_ => {});
+    },
+    validMachiningProductRecord() {
+      let loc = JSON.parse(window.localStorage.getItem("terminal"));
+      let body = {
+        workStationCode: loc.workStationCode,
+        scanCode: this.code,
+        productionOrderNum: this.productionOrderNum,
+        qty: this.count
+      };
+      console.log(this.count);
+      httpserver(api.validMachiningProductRecord, body).then(response => {
+        console.log(response);
+        if (response.data.returnCode == "0") {
+          // this.productCount=this.productCount+this.count;
+          this.getMachiningProductionQueue();
         }
-
-
+      });
+    },
+    getHistoryInfo() {
+      this.dialogTableVisible = true;
+      let loc = JSON.parse(window.localStorage.getItem("terminal"));
+      let body = {
+        workStationCode: loc.workStationCode,
+        pageNo: "1",
+        pageSize: "1"
+      };
+      httpserver(api.getHistoryInfo, body).then(response => {
+        let resData = response.data.data;
+        this.gridData = resData.productionStnRecords;
+      });
+    },
+    getMachiningProductionQueue: function() {
+      let loc = JSON.parse(window.localStorage.getItem("terminal"));
+      let body = {
+        workCenterCode: loc.workCenterCode,
+        endRow: 4
+      };
+      httpserver(api.getMachiningProductionQueue, body).then(res => {
+        this.tableData = res.data.data;
+      });
+    },
+    handleCurrentChange(val, old) {
+      if (val != null) {
+        this.currentRow = val;
+        this.proinfo = val;
+        this.productCount = this.currentRow.scanQty;
+        this.plannedQty = this.currentRow.plannedQty;
+        this.productionOrderNum = this.currentRow.productionOrderNum;
+      } else {
+        this.tableData.forEach((value, index, table) => {
+          if (table[index].productionOrderNum == old.productionOrderNum) {
+            this.setCurrent(this.tableData[index]);
+          }
+        });
       }
     }
   }
+};
 </script>
 
 <style lang="less">
-  @import "../../css/online/crankshaftOnline.less";
+@import "../../css/online/crankshaftOnline.less";
 </style>

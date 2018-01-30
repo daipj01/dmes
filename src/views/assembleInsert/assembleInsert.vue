@@ -218,7 +218,10 @@ export default {
           if (error) {
             return console.log("Error opening port:", error.message);
           } else {
-            console.log("串口打开成功");
+            this.$message({
+              message: "窗口打开成功",
+              type: "success"
+            });
           }
         });
         parser.on("data", function(data) {
@@ -242,7 +245,10 @@ export default {
             if (err) {
               console.log(err);
             } else {
-              console.log("串口关闭成功");
+              this.$message({
+                message: "串口关闭成功",
+                type: "sussess"
+              });
             }
           });
         }
@@ -250,7 +256,7 @@ export default {
         // console.log(err);
       } finally {
         this.$message({
-          message: "窗口关闭失败",
+          message: "串口关闭失败",
           type: "error"
         });
       }
@@ -273,11 +279,9 @@ export default {
         }
       });
     }
-
   }
 };
 </script>
 <style lang="less">
-  @import "../../css/assmbleInsert/assembleInsert.less";
-
+@import "../../css/assmbleInsert/assembleInsert.less";
 </style>
