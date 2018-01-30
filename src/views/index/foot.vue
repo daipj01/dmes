@@ -36,15 +36,14 @@
       <!--</el-dialog>-->
     </div>
 <!--滚动显示消息-->
-    <div class="marquee_box">
-      <ul class="marquee_list" :style="{ top: -num + 'px'}" :class="{marquee_top:num}">
-        <!-- 当显示最后一条的时候（num=0转换布尔类型为false）去掉过渡效果-->
-        <li v-for="(item, index) in marqueeList" >
-          <span>{{item.name}}</span>
-        </li>
-      </ul>
-    </div>
-
+    <!--<div class="marquee_box">-->
+      <!--<ul class="marquee_list" :style="{ top: -num + 'px'}" :class="{marquee_top:num}">-->
+        <!--&lt;!&ndash; 当显示最后一条的时候（num=0转换布尔类型为false）去掉过渡效果&ndash;&gt;-->
+        <!--<li v-for="(item, index) in marqueeList" >-->
+          <!--<span>{{item.name}}</span>-->
+        <!--</li>-->
+      <!--</ul>-->
+    <!--</div>-->
     <div class="system-info" sw-role="cell">
       <div class="time" sw-role="cell" sw-mode="y" sw-valign="center">
         <div>{{systime}}</div>
@@ -57,7 +56,6 @@
     <navlist :isMenuShow='isMenuShow'></navlist>
   </div>
 </template>
-
 <script>
 //   import config from '../../js/config'
   import getTime from '@/utils/timeFormat'
