@@ -112,7 +112,7 @@ export default {
       StepDatas: [
         { title: "托盘已到位,准备读取数据", icon: "el-icon-edit" },
         { title: "正在读取数据", icon: "el-icon-upload" },
-        { title: "读取数据成功", icon: "el-icon-picture" }
+        { title: "读取数据成功", icon: "el-icon-success" }
       ],
       title: "111",
       serialPort: "",
