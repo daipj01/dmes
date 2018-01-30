@@ -47,11 +47,22 @@
         <el-main>
           <div class="progress">
             <div class="container">
-              <el-steps direction="vertical" :active=index>
+              <!-- <el-steps direction="vertical" :active=index>
                 <el-step title="托盘已到位,准备初始化！" description=""></el-step>
                 <el-step title="正在请求订单数据！" description=""></el-step>
                 <el-step title="正在下发TAG数据！" description=""></el-step>
                 <el-step title="初始化成功！" description=""></el-step>
+              </el-steps> -->
+              <el-steps ref="steps" direction="vertical" :active=number>
+                <!-- <el-step title="" description="" icon="el-icon-edit"></el-step>
+                <el-step title="" description="" icon="el-icon-upload"></el-step>
+                <el-step title="" description="" icon="el-icon-picture"></el-step> -->
+                <el-step v-for="(stepData,index) in StepDatas"
+                :icon="stepData.icon"
+                :title="stepData.title"
+                :description="stepData.description"
+                :key="index"
+                ></el-step>
               </el-steps>
             </div>
           </div>
@@ -117,8 +128,13 @@ import httpserver from "../../utils/http.js";
 export default {
   data() {
     return {
+      StepDatas: [
+        { title: "托盘已到位,准备读取数据", icon: "el-icon-edit" },
+        { title: "正在读取数据", icon: "el-icon-upload" },
+        { title: "读取数据成功", icon: "el-icon-picture" }
+      ],
       proinfo: {},
-      index: 0,
+      number: 0,
       tableData: [],
       dialogTableVisible: false,
       dialogFormVisible: false,
@@ -190,26 +206,31 @@ export default {
       mqttLib.registerMessageHandler(topic, "message", function(message) {
         let record = JSON.parse(message.payloadString).Content.Step;
         let data = JSON.parse(message.payloadString).Content.Data;
-        console.log(data);
+        let log = JSON.parse(message.payloadString).Content.Log;
+        console.log(message.payloadString);
         switch (record) {
-          case "Init":
-            _this.index = 1;
-            break;
           case "Ready":
-            _this.index = 2;
+            _this.number = 1;
+            _this.StepDatas[_this.number - 1].title = log;
             break;
           case "Download":
-            _this.index = 3;
-            let body = {
+            _this.number = 2;
+            _this.StepDatas[_this.number - 1].title = log;
+            let body2 = {
               workOrderNum: data
             };
-            httpserver(api.getCurrentProductionOrder, body).then(response => {
+            httpserver(api.getCurrentProductionOrder, body2).then(response => {
               _this.proinfo = response.data.data;
             });
             break;
           case "Complete":
-            _this.index = 4;
+            _this.number = 3;
+            _this.StepDatas[_this.number - 1].title = log;
+            _this.$options.methods.getData();
             break;
+          default:
+            _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas[_this.number - 1].description = "ERROR!!!";
         }
       });
     },

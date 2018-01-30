@@ -51,20 +51,22 @@
         <el-main>
           <div class="progress">
             <div class="container">
-              <el-steps direction="vertical" :active=index>
-                <el-step title="托盘已到位,准备初始化!" description=""></el-step>
-                <el-step title="正在请求订单数据！" description=""></el-step>
-                <el-step title="正在下发TAG数据！" description=""></el-step>
-                <el-step title="初始化成功！" description=""></el-step>
+              <el-steps ref="steps" direction="vertical" :active=number>
+                <!-- <el-step title="" description="" icon="el-icon-edit"></el-step>
+                <el-step title="" description="" icon="el-icon-upload"></el-step>
+                <el-step title="" description="" icon="el-icon-picture"></el-step> -->
+                <el-step v-for="(stepData,index) in StepDatas"
+                :icon="stepData.icon"
+                :title="stepData.title"
+                :description="stepData.description"
+                :key="index"
+                ></el-step>
               </el-steps>
             </div>
           </div>
         </el-main>
       </el-container>
     </div>
-    <!--<div class="fixed-box">-->
-    <!--<span>TAG初始化</span>-->
-    <!--</div>-->
     <div class="icon-pad-history" @click="getHistoryInfo()">
     </div>
     <el-dialog :visible.sync="dialogTableVisible" width="80%">
@@ -100,184 +102,180 @@
 </template>
 
 <script type="text/babel">
-  import httpserver from '../../utils/http.js';
-  import api from '../../utils/api.js';
-  import mqttLib from '../../utils/mqtt.js';
+import httpserver from "../../utils/http.js";
+import api from "../../utils/api.js";
+import mqttLib from "../../utils/mqtt.js";
 
-  export default {
-    data() {
-      return {
-        serialPort: '',
-        name: 'pro-gress',
-        code: '',
-        index: 0,
-        dialogTableVisible: false,
-        tableData: [],
-        total: 0,
-        gridData: [],
-        productCount: 0
+export default {
+  data() {
+    return {
+      StepDatas: [
+        { title: "托盘已到位,准备读取数据", icon: "el-icon-edit" },
+        { title: "正在读取数据", icon: "el-icon-upload" },
+        { title: "读取数据成功", icon: "el-icon-picture" }
+      ],
+      title: "111",
+      serialPort: "",
+      name: "pro-gress",
+      code: "",
+      number: 0,
+      dialogTableVisible: false,
+      tableData: [],
+      total: 0,
+      gridData: [],
+      productCount: 0
+    };
+  },
+  beforeRouteLeave(to, from, next) {
+    this.closeCom();
+    next();
+  },
+  created() {
+    this.subscribe();
+    console.log("开始订阅消息");
+  },
+  mounted() {
+    this.openCom();
+  },
+  beforeDestroy() {
+    this.unsubscribe();
+    console.log("取消订阅");
+  },
+  methods: {
+    subscribe() {
+      let _this = this;
+      let topic = "/logs/STN3010";
+      mqttLib.subscribe(topic, "message");
+      mqttLib.registerMessageHandler(topic, "message", function(message) {
+        console.log(message.payloadString);
+        let step = JSON.parse(message.payloadString).Content.Step;
+        let log = JSON.parse(message.payloadString).Content.Log;
+        switch (step) {
+          case "Read":
+            _this.number = 1;
+            _this.StepDatas[_this.number - 1].title = log;
+            break;
+          case "Upload":
+            _this.number = 2;
+            _this.StepDatas[_this.number - 1].title = log;
+            break;
+          case "Completed":
+            _this.number = 3;
+            _this.StepDatas[_this.number - 1].title = log;
+            break;
+          default:
+            _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas[_this.number - 1].description = "ERROR!请手动操作!";
+        }
+      });
+    },
+    unsubscribe() {
+      let topic = "/logs";
+      mqttLib.unsubscribe(topic, "message");
+    },
+    getHistoryInfo() {
+      this.dialogTableVisible = true;
+      let loc = JSON.parse(window.localStorage.getItem("terminal"));
+      let body = {
+        workStationCode: loc.workStationCode,
+        pageNo: "1",
+        pageSize: "1"
+      };
+      httpserver(api.getHistoryInfo, body).then(response => {
+        let resData = response.data.data;
+        this.gridData = resData.productionStnRecords;
+        this.total = resData.toalCount;
+      });
+    },
+    //      控制每页几条
+    handleSizeChange(val) {},
+    //      当前的页数
+    handleCurrentChange(val) {
+      this.dialogTableVisible = true;
+      let loc = JSON.parse(window.localStorage.getItem("terminal"));
+      let body = {
+        workStationCode: loc.workStationCode,
+        pageNo: val,
+        pageSize: "1"
+      };
+      httpserver(api.getHistoryInfo, body).then(response => {
+        let resData = response.data.data;
+        this.gridData = resData.productionStnRecords;
+        this.total = resData.toalCount;
+      });
+    },
+    openCom() {
+      try {
+        let _this = this;
+        let port = new SerialPort(
+          JSON.parse(window.localStorage.getItem("serialPort")).port,
+          { autoOpen: false }
+        );
+        let Readline = SerialPort.parsers.Readline;
+        let parser = new Readline();
+        port.pipe(parser);
+        port.open(function(error) {
+          if (error) {
+            return console.log("Error opening port:", error.message);
+          } else {
+            console.log("串口打开成功");
+          }
+        });
+        parser.on("data", function(data) {
+          _this.code = data;
+        });
+        _this.serialPort = port;
+      } catch (err) {
+        // console.log(err);
+      } finally {
+        this.$message({
+          message: "窗口打开失败",
+          type: "error"
+        });
       }
     },
-    beforeRouteLeave(to, from, next) {
-      this.closeCom();
-      next()
-    },
-    created() {
-      this.subscribe();
-    },
-    mounted() {
-      this.openCom();
-    },
-    beforeDestroy() {
-      this.unsubscribe();
-    },
-    methods: {
-      subscribe() {
-        let _this = this;
-        let topic = "/logs/STN3010";
-        let record;
-        let data;
-        mqttLib.subscribe(topic, "message");
-        mqttLib.registerMessageHandler(topic, "message", function (message) {
-            record = JSON.parse(message.payloadString).Content.Step;
-            data = JSON.parse(message.payloadString).Content.Data;
-            console.log(data);
-            switch (record) {
-              case "Init":
-                _this.index = 1;
-                break;
-              case "Ready":
-                _this.index = 2;
-                break;
-              case "Download":
-                _this.index = 3;
-                let body = {
-                  workOrderNum: data
-                };
-                httpserver(api.getCurrentProductionOrder, body)
-                  .then((response) => {
-                    _this.proinfo = response.data.data;
-                  });
-                break;
-              case "Complete":
-                _this.index = 4;
-                break;
-            }
-          }
-        );
-      },
-      unsubscribe() {
-        let topic = "/logs";
-        mqttLib.unsubscribe(topic, "message");
-      },
-      getHistoryInfo() {
-        this.dialogTableVisible = true;
-        let loc = JSON.parse(window.localStorage.getItem('terminal'));
-        let body = {
-          workStationCode: loc.workStationCode,
-          pageNo: "1",
-          pageSize: "1"
-        };
-        httpserver(api.getHistoryInfo, body)
-          .then((response) => {
-            let resData = response.data.data;
-            this.gridData = resData.productionStnRecords;
-            this.total = resData.toalCount;
-          })
-      },
-//      控制每页几条
-      handleSizeChange(val) {
-
-      },
-//      当前的页数
-      handleCurrentChange(val) {
-        this.dialogTableVisible = true;
-        let loc = JSON.parse(window.localStorage.getItem('terminal'));
-        let body = {
-          workStationCode: loc.workStationCode,
-          pageNo: val,
-          pageSize: "1"
-        };
-        httpserver(api.getHistoryInfo, body)
-          .then((response) => {
-            let resData = response.data.data;
-            this.gridData = resData.productionStnRecords;
-            this.total = resData.toalCount;
-
-          })
-      },
-      openCom() {
-        try {
+    closeCom() {
+      try {
+        if (this.serialPort.isOpen) {
           let _this = this;
-          let port = new SerialPort(JSON.parse(window.localStorage.getItem('serialPort')).port, {autoOpen: false});
-          let Readline = SerialPort.parsers.Readline;
-          let parser = new Readline();
-          port.pipe(parser);
-          port.open(function (error) {
-            if (error) {
-              return console.log("Error opening port:", error.message);
+          _this.serialPort.close(function(err) {
+            if (err) {
+              console.log(err);
             } else {
-              console.log("串口打开成功");
+              console.log("串口关闭成功");
             }
           });
-          parser.on('data', function (data) {
-            _this.code = data;
-          });
-          _this.serialPort = port;
         }
-        catch (err) {
-          // console.log(err);
-        } finally {
-          this.$message({
-            message: '窗口打开失败',
-            type: 'error'
-          });
-        }
-
-      },
-      closeCom() {
-        try {
-          if (this.serialPort.isOpen) {
-            let _this = this;
-            _this.serialPort.close(function (err) {
-              if (err) {
-                console.log(err);
-              } else {
-                console.log("串口关闭成功");
-              }
-            })
+      } catch (err) {
+        // console.log(err);
+      } finally {
+        this.$message({
+          message: "窗口关闭失败",
+          type: "error"
+        });
+      }
+    },
+    getSerialNoInformation() {
+      let body = {
+        serialNo: this.code
+      };
+      httpserver(api.getSerialNoInformation, body).then(res => {
+        //6947463266069
+        if (res.data.returnCode == "0") {
+          this.gridData = res.data.data;
+          this.productCount++;
+          if (res.data.data.hotTest == "0") {
+            console.log(
+              (document.getElementById("ishotTest").style.display = "flex")
+            );
           }
+        } else {
         }
-        catch (err) {
-          // console.log(err);
-        } finally {
-          this.$message({
-            message: '窗口关闭失败',
-            type: 'error'
-          });
-        }
-      },
-      getSerialNoInformation() {
-        let body = {
-          serialNo: this.code
-        };
-        httpserver(api.getSerialNoInformation, body)
-          .then((res) => {
-            //6947463266069
-            if (res.data.returnCode == "0") {
-              this.gridData = res.data.data;
-              this.productCount++;
-              if (res.data.data.hotTest == "0") {
-                console.log(document.getElementById("ishotTest").style.display = "flex");
-              }
-            }else{
-            }
-          })
-      },
-
+      });
     }
 
   }
+};
 </script>
 <style lang="less">
   @import "../../css/assmbleInsert/assembleInsert.less";
