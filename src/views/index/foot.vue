@@ -41,11 +41,6 @@
         <!-- 当显示最后一条的时候（num=0转换布尔类型为false）去掉过渡效果-->
         <li v-for="(item, index) in marqueeList" >
           <span>{{item.name}}</span>
-          <span>在</span>
-          <span class="red"> {{item.city}}</span>
-          <span>杀敌</span>
-          <span class="red"> {{item.amount}}</span>
-          <span>万</span>
         </li>
       </ul>
     </div>
@@ -113,23 +108,15 @@
         marqueeList: [
           {
             name:'1军',
-            city:'北京',
-            amount:'10'
           },
           {
             name:'2军',
-            city:'上海',
-            amount:'20'
           },
           {
             name:'3军',
-            city:'广州',
-            amount:'30'
           },
           {
             name:'4军',
-            city:'重庆',
-            amount:'40'
           }
         ]
 //        connectTime:0
