@@ -92,7 +92,7 @@
       </el-pagination>
     </el-dialog>
     <div class="icon-pad-history" @click="getHistoryInfo()"></div>
-    <div class="icon-pad-save" @click="replenishPrint()">保存</div>
+    <div class="icon-pad-save" @click="replenishPrint()">补打印</div>
     <!--<div class="fixed-box">-->
       <!--<span @click="getHistoryInfo()">历史记录</span>-->
       <!--<span @click="replenishPrint()">补打印</span>-->

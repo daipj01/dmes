@@ -37,32 +37,7 @@ export default{
   name:"message",
   data(){
     return{
-      tabPosition: 'top',
-      activeNames: ['1'],
-      chooseTypeVal: 2,
-      messageData:[
-      {
-        title:'11',
-        message:'1111111',
-        status:0
-      },
-      {
-        title:'11',
-        message:'1111111',
-        status:0
-      },
-      {
-        title:'11',
-        message:'1111111',
-        status:0
-      },
-      {
-        title:'11',
-        message:'1111111',
-        status:0
-      },
-      ],
-      isHasRead:false
+
     }
   },
   methods:{

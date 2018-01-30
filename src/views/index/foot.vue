@@ -4,22 +4,52 @@
     <div class="btn-list">
       <div class="foot-btn f-cp icon-pad-menu" id="ment-list" v-on:click="menuClick()" style="color:#fff;">
       </div>
-      <router-link :to="{name:'消息'}">
-        <div class="foot-btn f-cp icon-pad-message">
+      <!--<router-link :to="{name:'消息'}">-->
+        <div class="foot-btn f-cp icon-pad-message" v-on:click="getMessage()">
         </div>
-      </router-link>
+      <!--</router-link>-->
 
 
       <div class="foot-btn f-cp icon-pad-fullscreen" v-on:click="requestFullScreen()">
       </div>
-      <el-dialog title="测试消息" :visible.sync="messageDialogVisible" width="80%" center>
-        <span class="message">{{messages}}</span>
-        <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="subscribe()">订阅消息</el-button>
-        <el-button type="primary" @click="unsubscribe()">取消订阅</el-button>
-        </span>
+      <!--后台、mqtt推送的消息-->
+      <el-dialog  :visible.sync="messageDialogVisible" width="80%" center>
+        <el-tabs type="border-card">
+          <el-tab-pane label="消息订阅">
+            <el-collapse v-model="activeNames" @change="handleChange" v-if="this.chooseTypeVal==2">
+              <el-collapse-item :title="item.title" :name="index" v-for="(item,index) in messageData" :key="index" >
+                <template slot="title">
+                  一致性 Consistency <i class="message-icon-read"></i>
+                </template>
+                <div>{{item.message}}</div>
+              </el-collapse-item>
+            </el-collapse>
+          </el-tab-pane>
+        </el-tabs>
       </el-dialog>
+      <!--<el-dialog title="测试消息" :visible.sync="messageDialogVisible" width="80%" center>-->
+        <!--<span class="message">{{messages}}</span>-->
+        <!--<span slot="footer" class="dialog-footer">-->
+        <!--<el-button type="primary" @click="subscribe()">订阅消息</el-button>-->
+        <!--<el-button type="primary" @click="unsubscribe()">取消订阅</el-button>-->
+        <!--</span>-->
+      <!--</el-dialog>-->
     </div>
+<!--滚动显示消息-->
+    <div class="marquee_box">
+      <ul class="marquee_list" :style="{ top: -num + 'px'}" :class="{marquee_top:num}">
+        <!-- 当显示最后一条的时候（num=0转换布尔类型为false）去掉过渡效果-->
+        <li v-for="(item, index) in marqueeList" >
+          <span>{{item.name}}</span>
+          <span>在</span>
+          <span class="red"> {{item.city}}</span>
+          <span>杀敌</span>
+          <span class="red"> {{item.amount}}</span>
+          <span>万</span>
+        </li>
+      </ul>
+    </div>
+
     <div class="system-info" sw-role="cell">
       <div class="time" sw-role="cell" sw-mode="y" sw-valign="center">
         <div>{{systime}}</div>
@@ -46,12 +76,62 @@
       return {
         fullscreen: true,
         messages: '',
+        num:0,
         messageDialogVisible: false,
         sysdate: '',
         week: '',
         systime: '',
         isMenuShow: false,
         wifiStatus: '0',
+        tabPosition: 'top',
+        activeNames: ['1'],
+        chooseTypeVal: 2,
+        messageData:[
+          {
+            title:'11',
+            message:'1111111',
+            status:0
+          },
+          {
+            title:'11',
+            message:'1111111',
+            status:0
+          },
+          {
+            title:'11',
+            message:'1111111',
+            status:0
+          },
+          {
+            title:'11',
+            message:'1111111',
+            status:0
+          },
+        ],
+        isHasRead:false,
+        animate:false,
+        marqueeList: [
+          {
+            name:'1军',
+            city:'北京',
+            amount:'10'
+          },
+          {
+            name:'2军',
+            city:'上海',
+            amount:'20'
+          },
+          {
+            name:'3军',
+            city:'广州',
+            amount:'30'
+          },
+          {
+            name:'4军',
+            city:'重庆',
+            amount:'40'
+          }
+        ]
 //        connectTime:0
       }
     },
@@ -77,6 +157,7 @@
         clearInterval(this.time);
       }
       this.gettest();
+      this.showMarquee(this.num)
     },
     methods: {
 //      全屏
@@ -144,7 +225,45 @@
       unsubscribe() {
         console.log("close----------");
         mqttLib.unsubscribe("/message", "message");
+      },
+      handleChange(val) {
+        let order=val[val.length-1]
+        this.messageData[order].status=1
+      },
+      haveRead(){
+        this.isHasRead=true;
+      },
+      switchPane(e){
+        this.chooseTypeVal = e === '全部' ? 2 : e === '已读' ? 1 : 0;
+      },
+      messlist2:function(list){
+        return this.messageData.filter(function(item){
+          return item.status==2
+        })
+      },
+      messlist1:function(list){
+        return this.messageData.filter(function(item){
+          return item.status==1
+        })
+      },
+      messlist0:function(list){
+        return this.messageData.filter(function(item){
+          return item.status==0
+        })
+      },
+      showMarquee:function (num) {
+        this.marqueeList.push(this.marqueeList[0]);
+        var max = this.marqueeList.length;
+        var that = this;
+        marqueetimer =  setInterval(function(){
+          num++;
+          if(num>=max ){
+            num=0;
+          }
+          that.num=num*30;
+        }, 2000);
       }
+
     }
   }
 </script>
@@ -273,6 +392,72 @@
   .icon-pad-fullscreen {
     background: url("../../assets/fullscreen.png");
     background-size: 100% 100%;
+  }
+  .el-tabs{
+    width: 100%;
+    height: 19rem;
+  }
+  .el-tabs--border-card > .el-tabs__content{
+    max-height: 13rem;
+    overflow-y: auto;
+  }
+  .message-icon-read{
+    width: 1.5rem;
+    height: 1.5rem;
+    background: url("../../assets/notread.png");
+    background-size: 100% 100%;
+  }
+  ul,li,span,img{
+    margin:0;
+    padding:0;
+    /*display: flex;*/
+    box-sizing: border-box;
+  }
+
+  .marquee{
+    width: 100%;
+    height: 50px;
+    align-items: center;
+    color: #3A3A3A;
+    background-color: aqua;
+    display: flex;
+    box-sizing: border-box;
+  }
+  .marquee_title{
+    padding: 0 20px;
+    height: 30px;/*关键样式*/
+    font-size: 14px;
+    border-right: 1px solid #d8d8d8;
+    align-items: center;
+  }
+
+  .marquee_box{
+    display: block;
+    position: relative;
+    width: 60%;
+    height: 30px;/*关键样式*/
+    overflow: hidden;
+  }
+  .marquee_list{
+    display: block;
+    position: absolute;
+    top:0;
+    left: 0;
+    width:80%;
+  }
+  .marquee_top{transition: top 0.5s ;}/*关键样式*/
+  .marquee_list li{
+    height: 30px;/*关键样式*/
+    line-height: 30px;/*关键样式*/
+    font-size: 14px;
+    padding-left: 20px;
+    background-color: #fff;
+  }
+  .marquee_list li span{
+    padding:0 2px;
+  }
+  .red{
+    color: #FF0101;
   }
 
 </style>

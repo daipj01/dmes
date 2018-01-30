@@ -11,7 +11,7 @@ import HostTest from '@/views/hottest/hottest.vue';
 import MachineInsert from '@/views/machineWorkInsert/machineWorkInsert.vue';
 import Home from '@/views/home/home.vue';
 import crankshaftOnline from '@/views/online/crankshaftOnline.vue';
-import Message from '@/views/index/message.vue';
+// import Message from '@/views/index/message.vue';
 
 Vue.use(Router)
 
@@ -29,7 +29,7 @@ export default new Router({
         {path: '/MachineInsert', component: MachineInsert, name: '机加下线'},
         {path: '/online/crankshaftOnline', component: crankshaftOnline, name: '曲轴上线'},
         {path:'/home', component: Home, name:'首页'},
-        {path:'/message', component: Message, name:'消息'}
+        // {path:'/message', component: Message, name:'消息'}
       ]
     },
     {
