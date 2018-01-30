@@ -1,0 +1,171 @@
+.assembleInsert {
+  .el-step__description {
+    padding-right: 10%;
+    margin-top: -5px;
+    font-size: 1.6rem;
+    font-weight: bold;
+    line-height: 20px;
+    font-weight: 400;
+    color:#000000;
+  }
+  .el-step__title {
+    font-size: 26px;
+    line-height: 38px;
+  }
+  .topbox {
+    height: 400px;
+    display: flex;
+    margin-top: 1rem;
+    .el-aside {
+      background-color: #fff;
+      .el-row {
+        padding-left: 20px;
+         width: 95%;
+         height: 120px;
+         margin-bottom: 0px;
+         .el-col {
+           margin-top:20px;
+           height: 40px;
+           border-radius: 4px;
+         }
+       }
+    }
+    .el-main {
+      background-color: #fff;
+      padding: 0;
+      margin-left: 1rem;
+      .progress{
+        margin-top: 1rem;
+        margin-left: 1rem;
+        height: 23rem;
+        .container{
+          height: 23rem;
+
+        }
+      }
+
+
+    }
+
+  }
+  .bottom-box {
+    height: 50px;
+    background-color: #fff;
+    margin-top: 1rem;
+    line-height: 12rem;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    #ishotTest {
+      align-items: center;
+      display: none;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      font-size: 2.6rem;
+      color:#0c0101;
+      background-color: #ff4d51;
+    }
+  }
+  .convent {
+    background-color: #fff;
+    height: 7rem;
+    align-items: center;
+    display: flex;
+    /*justify-content: center;!*水平居中*!*/
+    padding-left: 4rem;
+    .convent-input {
+      align-items: center;
+      justify-content: center; /*水平居中*/
+      display: flex;
+      .el-input__inner {
+        background-color: #fff;
+        border-radius: 4px;
+        //border: 1px solid #dcdfe6;
+        box-sizing: border-box;
+        color: #000000;
+        display: inline-block;
+        font-size: 2rem;
+        height: 50px;
+        line-height: 1;
+        outline: 0;
+        padding: 0 15px;
+        width: 100%;
+      }
+    }
+    .el-button {
+      margin-left: 2rem;
+    }
+  }
+
+  .fixed-box {
+    span:first-child {
+      width: 7rem;
+      height: 7rem;
+      background-color: #009DD9;
+      position: fixed;
+      top: 21rem;
+      right: 0;
+      border-radius: 8rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.4rem;
+      color: white;
+    }
+  }
+  .icon-pad-history {
+    position: absolute;
+    right: 1rem;
+    top: 32rem;
+    width: 70px;
+    height: 70px;
+    background: url("../../assets/history.png");
+    background-size: 100% 100%;
+  }
+
+
+
+  .upperTable {
+    min-width: 1020px;
+  }
+
+  .right-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .row-container {
+    height: 65px;
+    width: 100%;
+  }
+  /* 从第二个子元素开始生效 */
+  /*.item-container{*/
+  /*margin-top: 0.2rem;*/
+  /*}*/
+
+  .item-container:nth-child(n+2) {
+    margin-left: 20px;
+  }
+
+  .label {
+    color: #000000;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: bold;
+  }
+
+  .detail {
+    margin-top: 20px;
+    color: #0890f1;
+    font-weight: bolder;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #323a03;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-height: 40px;
+  }
+}
+
