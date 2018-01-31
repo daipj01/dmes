@@ -47,7 +47,7 @@
     <vue-seamless-scroll :data="listData" class="seamless-warp" :class-option="classOption">
       <ul class="item">
         <li v-for="item in listData">
-          <span class="title" v-text="item.title"></span><span class="date" v-text="item.date"></span>
+          <span class="title" v-text="item.title"></span>
         </li>
       </ul>
     </vue-seamless-scroll>
@@ -114,20 +114,7 @@
           'title': '无缝滚动第一行无1111111111111111111111111111111111111111缝滚动第一行',
           'date': '2017-12-16'
         }],
-        marqueeList: [
-          {
-            name:'111111军',
-          },
-          {
-            name:'21111111军',
-          },
-          {
-            name:'311111111军',
-          },
-          {
-            name:'411111221军',
-          }
-        ]
+
 //        connectTime:0
       }
     },
@@ -166,7 +153,6 @@
         clearInterval(this.time);
       }
       this.gettest();
-      this.showMarquee(this.num)
     },
     methods: {
 //      全屏
@@ -260,19 +246,7 @@
           return item.status==0
         })
       },
-      showMarquee:function (num) {
-        this.marqueeList.push(this.marqueeList[0]);
-        var max = this.marqueeList.length;
-        var that = this;
-        let marqueetimer=0
-        marqueetimer =  setInterval(function(){
-          num++;
-          if(num>=max ){
-            num=0;
-          }
-          that.num=num*30;
-        }, 2000);
-      },
+
     }
   }
 </script>
@@ -474,6 +448,10 @@
 .seamless-warp{
   overflow: hidden;
   margin-right: 2rem;
-  font-size: 14px;
+  /*font-size: 14px;*/
 }
+  .seamless-warp>div{
+    font-size: 18px;
+    line-height: 1;
+  }
 </style>
