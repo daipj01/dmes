@@ -4,12 +4,8 @@
     <div class="btn-list">
       <div class="foot-btn f-cp icon-pad-menu" id="ment-list" v-on:click="menuClick()" style="color:#fff;">
       </div>
-      <!--<router-link :to="{name:'消息'}">-->
         <div class="foot-btn f-cp icon-pad-message" v-on:click="getMessage()">
         </div>
-      <!--</router-link>-->
-
-
       <div class="foot-btn f-cp icon-pad-fullscreen" v-on:click="requestFullScreen()">
       </div>
       <!--后台、mqtt推送的消息-->
@@ -35,15 +31,7 @@
         <!--</span>-->
       <!--</el-dialog>-->
     </div>
-<!--滚动显示消息-->
-    <!--<div class="marquee_box">-->
-      <!--<ul class="marquee_list" :style="{ left: -num + 'px'}" :class="{marquee_top:num}">-->
-        <!--&lt;!&ndash; 当显示最后一条的时候（num=0转换布尔类型为false）去掉过渡效果&ndash;&gt;-->
-        <!--<li v-for="(item, index) in marqueeList" style="float: left;">-->
-          <!--<span>{{item.name}}</span>-->
-        <!--</li>-->
-      <!--</ul>-->
-    <!--</div>-->
+    <!--滚动显示消息-->
     <vue-seamless-scroll :data="listData" class="seamless-warp" :class-option="classOption">
       <ul class="item">
         <li v-for="item in listData">
@@ -64,7 +52,6 @@
   </div>
 </template>
 <script>
-//   import config from '../../js/config'
   import getTime from '@/utils/timeFormat'
   import timer from '@/utils/timerManager'
   import httpserver from '../../utils/http.js';
@@ -155,7 +142,7 @@
       this.gettest();
     },
     methods: {
-//      全屏
+      //      全屏
       requestFullScreen() {
         var element = document.documentElement;
         if (this.fullscreen == true) {
@@ -448,6 +435,7 @@
 .seamless-warp{
   overflow: hidden;
   margin-right: 2rem;
+  height: 3rem;
   /*font-size: 14px;*/
 }
   .seamless-warp>div{
