@@ -45,20 +45,32 @@
         </el-table>
       </div>
     </div>
-    <el-dialog  :visible.sync="dialogTableVisible" width="80%">
-      <el-table :data="gridData" style="width: 100%">
-        <el-table-column type="index" label="序号" width="100">
-        </el-table-column>
-        <el-table-column prop="materialCode" label="物料编号">
-        </el-table-column>
-        <el-table-column prop="materialText" label="物料描述">
-        </el-table-column>
-        <el-table-column prop="quanlity" label="产品序列号">
-        </el-table-column>
-        <el-table-column prop="orderNo" label="下线时间">
-        </el-table-column>
-      </el-table>
-    </el-dialog>
+    <!---->
+    <div class="history-info">
+      <el-dialog  :visible.sync="dialogTableVisible" width="80%">
+        <el-table :data="gridData" style="width: 100%">
+          <el-table-column type="index" label="序号" width="100">
+          </el-table-column>
+          <el-table-column prop="materialCode" label="物料编号">
+          </el-table-column>
+          <el-table-column prop="materialText" label="物料描述">
+          </el-table-column>
+          <el-table-column prop="quanlity" label="产品序列号">
+          </el-table-column>
+          <el-table-column prop="orderNo" label="下线时间">
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :page-sizes="[1]"
+          :page-size="1"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
+        </el-pagination>
+      </el-dialog>
+    </div>
+
     <!--托条码打印弹出窗口-->
     <el-dialog  :visible.sync="dialogVisible" width="80%" title="托条码补打印">
       <div class="linear-input">

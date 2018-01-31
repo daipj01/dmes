@@ -2,7 +2,7 @@
   <div class="assemblyOnline">
     <el-container>
       <el-aside width="60%">
-    
+
                 <el-row :gutter="20">
                   <el-col :span="12">
                     <label class="label">工单编号</label>
@@ -59,32 +59,36 @@
     </div>
     <div class="icon-pad-history" @click="getHistoryInfo()">
     </div>
-    <el-dialog :visible.sync="dialogTableVisible" width="80%">
-      <el-table :data="gridData">
-        <el-table-column prop="productOrderNum" label="订单编号">
-        </el-table-column>
-        <el-table-column prop="productionOrderNum" label="工单编号">
-        </el-table-column>
-        <el-table-column prop="productModel" label="机型">
-        </el-table-column>
-        <el-table-column prop="materialCode" label="物料编码">
-        </el-table-column>
-        <el-table-column prop="materialText" label="物料描述">
-        </el-table-column>
-        <el-table-column prop="quanlity" label="计划数量">
-        </el-table-column>
-        <el-table-column prop="orderNo" label="顺序号">
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :page-sizes="[1]"
-        :page-size="1"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total">
-      </el-pagination>
-    </el-dialog>
+    <!--历史记录-->
+    <div class="history-info">
+      <el-dialog :visible.sync="dialogTableVisible" width="80%">
+        <el-table :data="gridData">
+          <el-table-column prop="productOrderNum" label="订单编号">
+          </el-table-column>
+          <el-table-column prop="productionOrderNum" label="工单编号">
+          </el-table-column>
+          <el-table-column prop="productModel" label="机型">
+          </el-table-column>
+          <el-table-column prop="materialCode" label="物料编码">
+          </el-table-column>
+          <el-table-column prop="materialText" label="物料描述">
+          </el-table-column>
+          <el-table-column prop="quanlity" label="计划数量">
+          </el-table-column>
+          <el-table-column prop="orderNo" label="顺序号">
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :page-sizes="[1]"
+          :page-size="1"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
+        </el-pagination>
+      </el-dialog>
+    </div>
+
   </div>
 </template>
 
