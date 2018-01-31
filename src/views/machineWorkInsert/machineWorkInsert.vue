@@ -69,7 +69,7 @@
       <el-table :data="palletizedData">
         <el-table-column
           type="selection"
-          width="55">
+          width="42">
         </el-table-column>
         <el-table-column type="index" prop="palletBarCode" label="托条码" width="100">
         </el-table-column>
@@ -81,7 +81,7 @@
         </el-table-column>
       </el-table>
       <!--<el-button type="primary">主要按钮</el-button>-->
-      <button class="print" @click="replenishPrint()">补打印</button>
+      <!--<button class="print" @click="replenishPrint()">补打印</button>-->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -91,6 +91,8 @@
         :total="total">
       </el-pagination>
     </el-dialog>
+
+
     <div class="icon-pad-history" @click="getHistoryInfo()"></div>
     <div class="icon-pad-save" @click="replenishPrint()">补打印</div>
     <!--<div class="fixed-box">-->
