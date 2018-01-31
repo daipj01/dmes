@@ -7,6 +7,9 @@ import ElementUI from 'element-ui'
 import '../theme/index.css'
 import store from './store'
 import UI from './components/ui';
+import scroll from 'vue-seamless-scroll'
+Vue.use(scroll)
+Vue.use(scroll,{componentName: 'scroll-seamless'})
 Vue.config.productionTip = false
 Vue.use(UI);
 Vue.use(ElementUI)

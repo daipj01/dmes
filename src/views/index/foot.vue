@@ -44,6 +44,13 @@
         <!--</li>-->
       <!--</ul>-->
     <!--</div>-->
+    <vue-seamless-scroll :data="listData" class="seamless-warp" :class-option="classOption">
+      <ul class="item">
+        <li v-for="item in listData">
+          <span class="title" v-text="item.title"></span><span class="date" v-text="item.date"></span>
+        </li>
+      </ul>
+    </vue-seamless-scroll>
     <div class="system-info" sw-role="cell">
       <div class="time" sw-role="cell" sw-mode="y" sw-valign="center">
         <div>{{systime}}</div>
@@ -103,6 +110,10 @@
         ],
         isHasRead:false,
         animate:false,
+        listData: [{
+          'title': '无缝滚动第一行无1111111111111111111111111111111111111111缝滚动第一行',
+          'date': '2017-12-16'
+        }],
         marqueeList: [
           {
             name:'111111军',
@@ -127,6 +138,19 @@
         },
         get() {
           return this.$store.state.timer1;
+        }
+      },
+//     滚动条配置项
+      classOption () {
+        return {
+          step: 1, //the faster the rolling speed is faster
+          limitMoveNum: 0, //start seamless scrolling minimum data  //this.dataList.length
+          hoverStop: true, //mouse hover control is enabled
+          direction: 2, // 0 down || 1 up || 2 left || 3 right
+//          openWatch: true, //open data realTime monitoring
+//          singleHeight: 0, //one single stop height(default zero is seamless) => direction 0/1
+//          singleWidth: 0, //one single stop width(default zero is seamless) => direction 2/3
+//          waitTime: 1000 //one single data stop wait time
         }
       }
     },
@@ -248,8 +272,7 @@
           }
           that.num=num*30;
         }, 2000);
-      }
-
+      },
     }
   }
 </script>
@@ -393,12 +416,12 @@
     background: url("../../assets/notread.png");
     background-size: 100% 100%;
   }
-  ul,li,span,img{
-    margin:0;
-    padding:0;
-    /*display: flex;*/
-    box-sizing: border-box;
-  }
+  /*ul,li,span,img{*/
+    /*margin:0;*/
+    /*padding:0;*/
+    /*!*display: flex;*!*/
+    /*box-sizing: border-box;*/
+  /*}*/
 
   .marquee{
     width: 100%;
@@ -445,5 +468,12 @@
   .red{
     color: #FF0101;
   }
-
+  .item li{
+    float: left;
+  }
+.seamless-warp{
+  overflow: hidden;
+  margin-right: 2rem;
+  font-size: 14px;
+}
 </style>
