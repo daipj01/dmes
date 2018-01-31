@@ -219,7 +219,7 @@ export default {
             return console.log("Error opening port:", error.message);
           } else {
             this.$message({
-              message: "窗口打开成功",
+              message: "串口打开成功",
               type: "success"
             });
           }
@@ -232,7 +232,7 @@ export default {
         // console.log(err);
       } finally {
         this.$message({
-          message: "窗口打开失败",
+          message: "串口打开失败",
           type: "error"
         });
       }
