@@ -1,4 +1,4 @@
-const apiBaseUrl = 'http://10.200.151.229:8021/';
+const apiBaseUrl = 'http://10.200.188.232:8021/';
 // const apiPcsUrl = 'http://10.200.151.229:8041/pcs/';//高文龙
 const apiPcsUrl = 'http://10.200.188.232:8041/pcs/';//服务器
 const serviceModule = {
