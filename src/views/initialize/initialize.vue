@@ -38,7 +38,7 @@
                  <el-row :gutter="20">
                   <el-col :span="24">
                     <label class="label">发动机号</label>
-                    <div class="detail"></div>
+                    <div class="detail">{{proinfo.serialNo}}</div>
                   </el-col>
                 </el-row>
               </div>
@@ -92,36 +92,32 @@
     <!--</div>-->
     <div class="icon-pad-history" @click="getHistoryInfo()">
     </div>
-    <!--历史记录-->
-    <div class="history-info">
-      <el-dialog :visible.sync="dialogTableVisible" width="80%">
-        <el-table :data="gridData">
-          <el-table-column prop="productOrderNum" label="订单编号">
-          </el-table-column>
-          <el-table-column prop="productionOrderNum" label="工单编号">
-          </el-table-column>
-          <el-table-column prop="productModel" label="机型">
-          </el-table-column>
-          <el-table-column prop="materialCode" label="物料编码">
-          </el-table-column>
-          <el-table-column prop="materialText" label="物料描述">
-          </el-table-column>
-          <el-table-column prop="quanlity" label="计划数量">
-          </el-table-column>
-          <el-table-column prop="orderNo" label="顺序号">
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :page-sizes="[1]"
-          :page-size="1"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-        </el-pagination>
-      </el-dialog>
-    </div>
-
+    <el-dialog :visible.sync="dialogTableVisible" width="80%">
+      <el-table :data="gridData">
+        <el-table-column prop="productOrderNum" label="订单编号">
+        </el-table-column>
+        <el-table-column prop="productionOrderNum" label="工单编号">
+        </el-table-column>
+        <el-table-column prop="productModel" label="机型">
+        </el-table-column>
+        <el-table-column prop="materialCode" label="物料编码">
+        </el-table-column>
+        <el-table-column prop="materialText" label="物料描述">
+        </el-table-column>
+        <el-table-column prop="quanlity" label="计划数量">
+        </el-table-column>
+        <el-table-column prop="orderNo" label="顺序号">
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-sizes="[1]"
+        :page-size="1"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -208,34 +204,48 @@ export default {
       let topic = "/logs/STN3010";
       mqttLib.subscribe(topic, "message");
       mqttLib.registerMessageHandler(topic, "message", function(message) {
-        let record = JSON.parse(message.payloadString).Content.Step;
-        let data = JSON.parse(message.payloadString).Content.Data;
-        let log = JSON.parse(message.payloadString).Content.Log;
-        console.log(message.payloadString);
-        switch (record) {
-          case "Ready":
-            _this.number = 1;
-            _this.StepDatas[_this.number - 1].title = log;
-            break;
-          case "Download":
-            _this.number = 2;
-            _this.StepDatas[_this.number - 1].title = log;
-            let body2 = {
-              workOrderNum: data
-            };
-            httpserver(api.getCurrentProductionOrder, body2).then(response => {
-              _this.proinfo = response.data.data;
-            });
-            break;
-          case "Complete":
-            _this.number = 3;
-            _this.StepDatas[_this.number - 1].title = log;
-            _this.$options.methods.getData();
-            break;
-          default:
-            _this.StepDatas[_this.number - 1].title = log;
-            _this.StepDatas[_this.number - 1].description = "ERROR!!!";
-            _this.StepDatas[_this.number - 1].icon = "el-icon-error";
+        let data = JSON.parse(message.payloadString);
+        console.log(data);
+        let content = data.Content;
+        let type = data.Type;
+        if (type == "LOAD") {
+          let step = content.Step;
+          let log = content.Log;
+          console.log(step);
+          switch (step) {
+            case "Ready":
+              _this.number = 1;
+              _this.StepDatas[_this.number - 1].title = log;
+              console.log(_this.StepDatas[_this.number - 1].description)
+              _this.StepDatas[_this.number - 1].description="";
+              break;
+            case "Download":
+              _this.number = 2;
+              _this.StepDatas[_this.number - 1].title = log;
+              console.log(_this.StepDatas[_this.number - 1].description)
+              _this.StepDatas[_this.number - 1].description="";
+              break;
+            case "Complete":
+              _this.number = 3;
+              _this.StepDatas[_this.number - 1].title = log;
+              console.log(_this.StepDatas[_this.number - 1].description)
+              _this.StepDatas[_this.number - 1].description="";
+              _this.$options.methods.getData();
+              console.log("111111111111");
+              break;
+            default:
+              _this.StepDatas[_this.number - 1].title = log;
+              _this.StepDatas[_this.number - 1].description = "ERROR!!!";
+              _this.StepDatas[_this.number - 1].icon = "el-icon-error";
+          }
+        } else {
+          let productionOrderNum = content.Data;
+          let body2 = {
+            productionOrderNum: productionOrderNum
+          };
+          httpserver(api.getCurrentProductionOrder, body2).then(response => {
+            _this.proinfo = response.data.data;
+          });
         }
       });
     },

@@ -280,6 +280,7 @@ export default {
             );
           }
         } else {
+          document.getElementById("ishotTest").style.display = ""
         }
       });
     }
