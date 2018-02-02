@@ -2,7 +2,6 @@
   <div class="assemblyOnline">
     <el-container>
       <el-aside width="60%">
-
                 <el-row :gutter="20">
                   <el-col :span="12">
                     <label class="label">工单编号</label>

@@ -145,12 +145,7 @@ export default {
     show: function(ev) {
       let _this = this;
       if (ev.keyCode == 13) {
-        let body = {
-          serialNo: _this.code
-        };
-        httpserver(api.getSerialNoInformation, body).then(res => {
-          this.gridData = res.data.data;
-        });
+       this.validplannedQty();
       }
     },
     openCom() {

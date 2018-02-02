@@ -43,7 +43,7 @@
     <div class="convent">
       <div class="convent-input">
         <span style=" width: 11rem;font-size: 1.4rem;color: rgb(0, 0, 0);font-weight: bold;">物料条码</span>
-        <el-input :autosize="{ minRows: 4, maxRows: 4}" size="80" @keyup.enter.native="show($event)"
+        <el-input :autosize="{ minRows: 4, maxRows: 4}" size="80" @keyup.enter.native="show2($event)"
                   v-model="materialCode">
         </el-input>
         <el-button type="primary" @click="getMaterialByCode()">确定</el-button>
@@ -155,14 +155,13 @@ export default {
   },
   methods: {
     show: function(ev) {
-      let _this = this;
       if (ev.keyCode == 13) {
-        let body = {
-          serialNo: _this.code
-        };
-        httpserver(api.getSerialNoInformation, body).then(res => {
-          this.gridData = res.data.data;
-        });
+        this.getOrderInfo();
+      }
+    },
+    show2: function(ev) {
+      if (ev.keyCode == 13) {
+        this.getMaterialByCode();
       }
     },
     //      产品序列号
@@ -170,8 +169,6 @@ export default {
       let body = {
         serialNo: this.code
       };
-      //6947463266069
-      //            6944437047143
       httpserver(api.getSerialNoInformation, body).then(res => {
         console.log(res);
         this.proinfo = res.data.data;
