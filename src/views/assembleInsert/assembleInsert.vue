@@ -144,6 +144,17 @@ export default {
     console.log("取消订阅");
   },
   methods: {
+    show: function(ev) {
+      let _this = this;
+      if (ev.keyCode == 13) {
+        let body = {
+          serialNo: _this.code
+        };
+        httpserver(api.getSerialNoInformation, body).then(res => {
+          this.gridData = res.data.data;
+        });
+      }
+    },
     subscribe() {
       let _this = this;
       let topic = "/logs/STN3010";
@@ -155,32 +166,31 @@ export default {
         switch (step) {
           case "1":
             _this.number = 1;
-            _this.StepDatas[_this.number].status = "wait";
-            _this.StepDatas[_this.number + 1].status = "wait";
-            _this.StepDatas[_this.number + 2].status = "wait";
-            _this.StepDatas[_this.number + 3].status = "wait";
-            _this.StepDatas[_this.number - 1].status = "success";
-            _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas.forEach(function(value, index, array) {
+              array[index].status = "wait";
+            });
+            _this.StepDatas[0].status = "success";
+            _this.StepDatas[0].title = log;
             break;
           case "2":
             _this.number = 2;
-            _this.StepDatas[_this.number - 1].status = "success";
-            _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas[1].status = "success";
+            _this.StepDatas[1].title = log;
             break;
           case "3":
             _this.number = 3;
-            _this.StepDatas[_this.number - 1].status = "success";
-            _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas[2].status = "success";
+            _this.StepDatas[2].title = log;
             break;
           case "4":
             _this.number = 4;
-            _this.StepDatas[_this.number - 1].status = "success";
-            _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas[3].status = "success";
+            _this.StepDatas[3].title = log;
             break;
           case "5":
             _this.number = 5;
-            _this.StepDatas[_this.number - 1].status = "success";
-            _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas[4].status = "success";
+            _this.StepDatas[4].title = log;
             break;
           default:
             _this.StepDatas[_this.number].title = log;

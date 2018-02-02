@@ -225,7 +225,7 @@ export default {
       };
       console.log(body);
       console.log(this.tableData);
-      httpserver(api.batchSavePartsData, body).then(res => {
+      httpserver(api.completeProductionOrder, body).then(res => {
         console.log(res);
         this.tableData = [];
       });

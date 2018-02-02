@@ -1,6 +1,6 @@
 const apiBaseUrl = 'http://10.200.188.232:8021/';
 // const apiPcsUrl = 'http://10.200.151.229:8041/pcs/';//高文龙
-const apiPcsUrl = 'http://10.200.188.232:8041/pcs/';//服务器
+const apiPcsUrl = 'http://10.200.151.229:8041/pcs/';//服务器
 const serviceModule = {
     //保存串口配置:#系统配置
     saveSystemCom: {
@@ -18,7 +18,7 @@ const serviceModule = {
         method: 'get'
     },
     //当前工单队列：#初始化
-    getinitializeTable: {
+    getProcutionOrderQueue: {
         url: apiPcsUrl + 'restful/pp/getProcutionOrderQueue',
         method: 'get'
     },
@@ -93,8 +93,8 @@ const serviceModule = {
         method: 'post'
     },
     //  装配明细批量上传
-    batchSavePartsData: {
-        url: apiPcsUrl + 'restful/pp/batchMachiningPartsData',
+    completeProductionOrder: {
+        url: apiPcsUrl + 'restful/pp/completeProductionOrder',
         method: "post"
     }
 

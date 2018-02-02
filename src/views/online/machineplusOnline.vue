@@ -39,39 +39,6 @@
                     <div class="detail">{{proinfo.plannedQty}}</div>
                   </el-col>
                 </el-row>
-        <!-- 第一行 -->
-        <!-- <div class="row f-df">
-          <div class="row-container f-df">
-            <div class="item-container f-f1">
-              <label class="label">工单编号</label>
-              <div class="detail">{{proinfo.productionOrderNum}}</div>
-            </div>
-            <div class="item-container f-f1">
-              <label class="label">物料编号</label>
-              <div class="detail">{{proinfo.materialCode}}</div>
-            </div>
-            <div class="item-container f-f1">
-              <label class="label">物料描述</label>
-              <div class="detail">{{proinfo.materialText}}</div>
-            </div>
-          </div>
-        </div> -->
-        <!-- <div class="row f-df">
-          <div class="row-container f-df">
-            <div class="item-container f-f1">
-              <label class="label">产品机型</label>
-              <div class="detail">{{proinfo.productModel}}</div>
-            </div>
-            <div class="item-container f-f1">
-              <label class="label">顺序号</label>
-              <div class="detail">{{proinfo.orderNo}}</div>
-            </div>
-            <div class="item-container f-f1">
-              <label class="label">计划数量</label>
-              <div class="detail">{{proinfo.plannedQty}}</div>
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
     <div class="bottom-form">
@@ -175,6 +142,17 @@ export default {
     this.openCom();
   },
   methods: {
+    show: function(ev) {
+      let _this = this;
+      if (ev.keyCode == 13) {
+        let body = {
+          serialNo: _this.code
+        };
+        httpserver(api.getSerialNoInformation, body).then(res => {
+          this.gridData = res.data.data;
+        });
+      }
+    },
     openCom() {
       try {
         let _this = this;
@@ -318,9 +296,7 @@ export default {
       console.log(`每页 ${val} 条`);
     },
     //      当前的页数
-    handleCurrentChange(val) {
-
-    },
+    handleCurrentChange(val) {}
   }
 };
 </script>
