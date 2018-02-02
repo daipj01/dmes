@@ -116,7 +116,8 @@ export default {
       StepDatas: [
         { title: "托盘已到位,准备读取数据", icon: "el-icon-edit" },
         { title: "正在读取数据", icon: "el-icon-upload" },
-        { title: "读取数据成功", icon: "el-icon-success" }
+        { title: "读取数据成功", icon: "el-icon-success" },
+        { title: "完成报工", icon: "el-icon-success" }
       ],
       title: "111",
       serialPort: "",
@@ -158,18 +159,27 @@ export default {
           case "Read":
             _this.number = 1;
             _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas[_this.number - 1].description = "";
             break;
           case "Upload":
             _this.number = 2;
             _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas[_this.number - 1].description = "";
             break;
           case "Completed":
             _this.number = 3;
             _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas[_this.number - 1].description = "";
+            break;
+          case "Finish":
+            _this.number = 4;
+            _this.StepDatas[_this.number - 1].title = log;
+            _this.StepDatas[_this.number - 1].description = "";
             break;
           default:
             _this.StepDatas[_this.number - 1].title = log;
-            _this.StepDatas[_this.number - 1].description = "ERROR!请手动操作!";
+            _this.StepDatas[_this.number - 1].description = "ERROR!!";
+            _this.StepDatas[_this.number - 1].icon = "el-icon-error";
         }
       });
     },
@@ -269,7 +279,7 @@ export default {
       let body = {
         serialNo: this.code
       };
-      httpserver(api.getSerialNoInformation, body).then(res => {
+      httpserver(api.productionStatusChange, body).then(res => {
         //6947463266069
         if (res.data.returnCode == "0") {
           this.gridData = res.data.data;
@@ -280,7 +290,7 @@ export default {
             );
           }
         } else {
-          document.getElementById("ishotTest").style.display = ""
+          document.getElementById("ishotTest").style.display = "";
         }
       });
     }

@@ -76,7 +76,7 @@
     </div>
     <div class="bottom-form">
       <el-table :data="tableData" border ref="table" style="width: 100%;" highlight-current-row
-                @current-change="handleCurrentChange">
+                @current-change="current">
         <el-table-column prop="orderNo" label="顺序号"  width="240">
         </el-table-column>
         <el-table-column prop="productionOrderNum" label="工单编号"  width="230">
@@ -299,7 +299,7 @@ export default {
         this.tableData = res.data.data;
       });
     },
-    handleCurrentChange(val, old) {
+    current(val, old) {
       if (val != null) {
         this.currentRow = val;
         this.proinfo = val;

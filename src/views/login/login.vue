@@ -32,7 +32,7 @@ export default {
       form: {
         userCode: "",
         password: "",
-        siteCode: "1001"
+        siteCode: "2018"
       },
       MenuListData: [],
       rule: {

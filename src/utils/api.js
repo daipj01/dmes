@@ -47,9 +47,19 @@ const serviceModule = {
         url: apiPcsUrl + 'restful/pp/validMachiningProductRecord',
         method: 'post'
     },
-    //根据产品序列号(发动机号)获取工单信息：#机加下线 #装配下线#热试
+    //根据产品序列号(发动机号)获取工单信息： #热试
     getSerialNoInformation: {
         url: apiPcsUrl + 'restful/pp/getSerialNoInformation',
+        method: 'get'
+    },
+    //#装配下线
+    productionStatusChange:{
+        url: apiPcsUrl + 'restful/pp/productionStatusChange',
+        method: 'get'
+    },
+    //#机加下线
+    productionMachiningStatusChange:{
+        url: apiPcsUrl + 'restful/pp/productionMachiningStatusChange',
         method: 'get'
     },
     //根据工厂编号获取工单信息: #初始化界面

@@ -167,7 +167,7 @@ export default {
         serialNo: this.code
       };
       //        接口暂时使用查询发动机的接口
-      httpserver(api.getSerialNoInformation, body).then(res => {
+      httpserver(api.productionMachiningStatusChange, body).then(res => {
         console.log(res);
         //6947463266069
         //            6944437047143

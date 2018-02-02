@@ -131,7 +131,8 @@ export default {
       StepDatas: [
         { title: "托盘已到位,正在请求订单数据！", icon: "el-icon-edit" },
         { title: "正在下发TAG数据！", icon: "el-icon-download" },
-        { title: "初始化成功！", icon: "el-icon-success" }
+        { title: "初始化成功！", icon: "el-icon-success" },
+        { title: "工单开工！", icon: "el-icon-success" }
       ],
       proinfo: {},
       number: 0,
@@ -159,7 +160,10 @@ export default {
         endRow: 3
       };
       httpserver(api.getinitializeTable, body).then(res => {
+        console.log("2222222222222");
+        console.log(res);
         this.tableData = res.data.data;
+        console.log(this.tableData);
       });
     },
     getHistoryInfo() {
@@ -216,20 +220,28 @@ export default {
             case "Ready":
               _this.number = 1;
               _this.StepDatas[_this.number - 1].title = log;
-              console.log(_this.StepDatas[_this.number - 1].description)
-              _this.StepDatas[_this.number - 1].description="";
+              console.log(_this.StepDatas[_this.number - 1].description);
+              _this.StepDatas[_this.number - 1].description = "";
               break;
             case "Download":
               _this.number = 2;
               _this.StepDatas[_this.number - 1].title = log;
-              console.log(_this.StepDatas[_this.number - 1].description)
-              _this.StepDatas[_this.number - 1].description="";
+              console.log(_this.StepDatas[_this.number - 1].description);
+              _this.StepDatas[_this.number - 1].description = "";
               break;
             case "Complete":
               _this.number = 3;
               _this.StepDatas[_this.number - 1].title = log;
-              console.log(_this.StepDatas[_this.number - 1].description)
-              _this.StepDatas[_this.number - 1].description="";
+              console.log(_this.StepDatas[_this.number - 1].description);
+              _this.StepDatas[_this.number - 1].description = "";
+              // _this.$options.methods.getData();
+              // console.log("111111111111");
+              break;
+            case "Finish":
+              _this.number = 4;
+              _this.StepDatas[_this.number - 1].title = log;
+              console.log(_this.StepDatas[_this.number - 1].description);
+              _this.StepDatas[_this.number - 1].description = "";
               _this.$options.methods.getData();
               console.log("111111111111");
               break;
