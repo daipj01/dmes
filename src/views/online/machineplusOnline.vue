@@ -48,12 +48,8 @@
         </el-table-column>
         <el-table-column prop="productionOrderNum" label="工单编号"  width="230">
         </el-table-column>
-        <!--<el-table-column prop="productModel" label="机型">-->
-        <!--</el-table-column>-->
         <el-table-column prop="materialCode" label="物料编码"  width="180">
         </el-table-column>
-        <!--<el-table-column prop="materialText" label="物料描述">-->
-        <!--</el-table-column>-->
         <el-table-column prop="plannedQty" label="计划数量"  width="180">
         </el-table-column>
         <el-table-column prop="scanQty" label="已扫数量"  width="190">
@@ -87,10 +83,7 @@
           :total="total">
         </el-pagination>
       </el-dialog>
-
     </div>
-
-
     <el-dialog
       title="注意"
       :visible.sync="centerDialogVisible"
@@ -104,7 +97,6 @@
     <el-button type="primary" @click="onFinish()">完成</el-button>
   </span>
     </el-dialog>
-
     <div class="icon-pad-history" @click="getHistoryInfo()">
     </div>
   </div>
@@ -145,7 +137,7 @@ export default {
     show: function(ev) {
       let _this = this;
       if (ev.keyCode == 13) {
-       this.validplannedQty();
+        this.validplannedQty();
       }
     },
     openCom() {
@@ -266,7 +258,7 @@ export default {
       let loc = JSON.parse(window.localStorage.getItem("terminal"));
       let body = {
         workCenterCode: loc.workCenterCode,
-        endRow: 4
+        endRow: 3
       };
       httpserver(api.getMachiningProductionQueue, body).then(res => {
         this.tableData = res.data.data;

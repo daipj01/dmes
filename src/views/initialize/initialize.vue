@@ -222,6 +222,9 @@ export default {
           };
           httpserver(api.getCurrentProductionOrder, body2).then(response => {
             _this.proinfo = response.data.data;
+            if (_this.proinfo==null){
+              _this.proinfo={}
+            }
           });
         }
       });
