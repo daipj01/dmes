@@ -52,14 +52,11 @@
           <div class="progress">
             <div class="container">
               <el-steps ref="steps" direction="vertical" :active=number>
-                <!-- <el-step title="" description="" icon="el-icon-edit"></el-step>
-                <el-step title="" description="" icon="el-icon-upload"></el-step>
-                <el-step title="" description="" icon="el-icon-picture"></el-step> -->
                 <el-step v-for="(stepData,index) in StepDatas"
                 :icon="stepData.icon"
                 :title="stepData.title"
-                :description="stepData.description"
                 :key="index"
+                :status="stepData.status"
                 ></el-step>
               </el-steps>
             </div>
@@ -114,12 +111,12 @@ export default {
   data() {
     return {
       StepDatas: [
-        { title: "托盘已到位,准备读取数据", icon: "el-icon-edit" },
-        { title: "正在读取数据", icon: "el-icon-upload" },
-        { title: "读取数据成功", icon: "el-icon-success" },
-        { title: "完成报工", icon: "el-icon-success" }
+        { title: "托盘已到位,准备读取数据", status: "wait" },
+        { title: "正在读取数据", status: "wait" },
+        { title: "读取数据成功,正在上传", status: "wait" },
+        { title: "上传成功", status: "wait" },
+        { title: "完成报工", status: "wait" }
       ],
-      title: "111",
       serialPort: "",
       name: "pro-gress",
       code: "",
@@ -156,30 +153,38 @@ export default {
         let step = JSON.parse(message.payloadString).Content.Step;
         let log = JSON.parse(message.payloadString).Content.Log;
         switch (step) {
-          case "Read":
+          case "1":
             _this.number = 1;
+            _this.StepDatas[_this.number].status = "wait";
+            _this.StepDatas[_this.number + 1].status = "wait";
+            _this.StepDatas[_this.number + 2].status = "wait";
+            _this.StepDatas[_this.number + 3].status = "wait";
+            _this.StepDatas[_this.number - 1].status = "success";
             _this.StepDatas[_this.number - 1].title = log;
-            _this.StepDatas[_this.number - 1].description = "";
             break;
-          case "Upload":
+          case "2":
             _this.number = 2;
+            _this.StepDatas[_this.number - 1].status = "success";
             _this.StepDatas[_this.number - 1].title = log;
-            _this.StepDatas[_this.number - 1].description = "";
             break;
-          case "Completed":
+          case "3":
             _this.number = 3;
+            _this.StepDatas[_this.number - 1].status = "success";
             _this.StepDatas[_this.number - 1].title = log;
-            _this.StepDatas[_this.number - 1].description = "";
             break;
-          case "Finish":
+          case "4":
             _this.number = 4;
+            _this.StepDatas[_this.number - 1].status = "success";
             _this.StepDatas[_this.number - 1].title = log;
-            _this.StepDatas[_this.number - 1].description = "";
+            break;
+          case "5":
+            _this.number = 5;
+            _this.StepDatas[_this.number - 1].status = "success";
+            _this.StepDatas[_this.number - 1].title = log;
             break;
           default:
-            _this.StepDatas[_this.number - 1].title = log;
-            _this.StepDatas[_this.number - 1].description = "ERROR!!";
-            _this.StepDatas[_this.number - 1].icon = "el-icon-error";
+            _this.StepDatas[_this.number].title = log;
+            _this.StepDatas[_this.number].status = "error";
         }
       });
     },

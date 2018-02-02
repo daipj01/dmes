@@ -47,21 +47,11 @@
         <el-main>
           <div class="progress">
             <div class="container">
-              <!-- <el-steps direction="vertical" :active=index>
-                <el-step title="托盘已到位,准备初始化！" description=""></el-step>
-                <el-step title="正在请求订单数据！" description=""></el-step>
-                <el-step title="正在下发TAG数据！" description=""></el-step>
-                <el-step title="初始化成功！" description=""></el-step>
-              </el-steps> -->
               <el-steps ref="steps" direction="vertical" :active=number>
-                <!-- <el-step title="" description="" icon="el-icon-edit"></el-step>
-                <el-step title="" description="" icon="el-icon-upload"></el-step>
-                <el-step title="" description="" icon="el-icon-picture"></el-step> -->
                 <el-step v-for="(stepData,index) in StepDatas"
-                :icon="stepData.icon"
                 :title="stepData.title"
-                :description="stepData.description"
                 :key="index"
+                :status="stepData.status"
                 ></el-step>
               </el-steps>
             </div>
@@ -129,10 +119,36 @@ export default {
   data() {
     return {
       StepDatas: [
-        { title: "托盘已到位,正在请求订单数据！", icon: "el-icon-edit" },
-        { title: "正在下发TAG数据！", icon: "el-icon-download" },
-        { title: "初始化成功！", icon: "el-icon-success" },
-        { title: "工单开工！", icon: "el-icon-success" }
+        {
+          title: "托盘已到位,正在请求订单数据！",
+          // icon: "el-icon-edit",
+          status: "wait"
+        },
+        {
+          title: "请求数据成功！",
+          // icon: "el-icon-success",
+          status: "wait"
+        },
+        {
+          title: "正在下发TAG数据！",
+          // icon: "el-icon-download",
+          status: "wait"
+        },
+        {
+          title: "下发数据成功！",
+          // icon: "el-icon-success",
+          status: "wait"
+        },
+        {
+          title: "初始化成功！",
+          // icon: "el-icon-success",
+          status: "wait"
+        },
+        {
+          title: "工单开工！",
+          // icon: "el-icon-success",
+          status: "wait"
+        }
       ],
       proinfo: {},
       number: 0,
@@ -217,38 +233,44 @@ export default {
           let log = content.Log;
           console.log(step);
           switch (step) {
-            case "Ready":
+            case "1":
               _this.number = 1;
+              _this.StepDatas[_this.number].status = "wait";
+              _this.StepDatas[_this.number + 1].status = "wait";
+              _this.StepDatas[_this.number + 2].status = "wait";
+              _this.StepDatas[_this.number + 3].status = "wait";
+              _this.StepDatas[_this.number + 4].status = "wait";
+              _this.StepDatas[_this.number - 1].status = "success";
               _this.StepDatas[_this.number - 1].title = log;
-              console.log(_this.StepDatas[_this.number - 1].description);
-              _this.StepDatas[_this.number - 1].description = "";
               break;
-            case "Download":
+            case "2":
               _this.number = 2;
+              _this.StepDatas[_this.number - 1].status = "success";
               _this.StepDatas[_this.number - 1].title = log;
-              console.log(_this.StepDatas[_this.number - 1].description);
-              _this.StepDatas[_this.number - 1].description = "";
               break;
-            case "Complete":
+            case "3":
               _this.number = 3;
+              _this.StepDatas[_this.number - 1].status = "success";
               _this.StepDatas[_this.number - 1].title = log;
-              console.log(_this.StepDatas[_this.number - 1].description);
-              _this.StepDatas[_this.number - 1].description = "";
-              // _this.$options.methods.getData();
-              // console.log("111111111111");
               break;
-            case "Finish":
+            case "4":
               _this.number = 4;
+              _this.StepDatas[_this.number - 1].status = "success";
               _this.StepDatas[_this.number - 1].title = log;
-              console.log(_this.StepDatas[_this.number - 1].description);
-              _this.StepDatas[_this.number - 1].description = "";
-              _this.$options.methods.getData();
-              console.log("111111111111");
+              break;
+            case "5":
+              _this.number = 5;
+              _this.StepDatas[_this.number - 1].status = "success";
+              _this.StepDatas[_this.number - 1].title = log;
+              break;
+            case "6":
+              _this.number = 6;
+              _this.StepDatas[_this.number - 1].status = "success";
+              _this.StepDatas[_this.number - 1].title = log;
               break;
             default:
-              _this.StepDatas[_this.number - 1].title = log;
-              _this.StepDatas[_this.number - 1].description = "ERROR!!!";
-              _this.StepDatas[_this.number - 1].icon = "el-icon-error";
+              _this.StepDatas[_this.number].status = "error";
+              _this.StepDatas[_this.number].title = log;
           }
         } else {
           let productionOrderNum = content.Data;
