@@ -83,7 +83,7 @@
           type="selection"
           width="42">
         </el-table-column>
-        <el-table-column type="index" prop="palletBarCode" label="托条码" width="100">
+        <el-table-column  prop="palletBarCode" label="托条码" width="100">
         </el-table-column>
         <el-table-column prop="materialCode" label="物料编号">
         </el-table-column>
@@ -163,45 +163,54 @@ export default {
     },
     //      根据序列号工单信息查询
     getOrderInfo() {
-      let body = {
-        serialNo: this.code
-      };
-      //        接口暂时使用查询发动机的接口
-      httpserver(api.productionMachiningStatusChange, body).then(res => {
-        console.log(res);
-        //6947463266069
-        //            6944437047143
-        let resData = res.data.data;
-        let productOrderNums = "";
-        if (res.data.returnCode == "0") {
-          this.tableData.push(res.data.data);
-          console.log(this.sequenceCount);
-          //打印条件 数量达到||这个订单号和上一个不一样了，打印
-          let palletCount = res.data.data.trayNumber;
-          console.log(res.data.data);
-          if (this.sequenceCount == palletCount) {
-            this.printContent();
-            this.tableData = [];
-          }
+      if(this.code!=''){
+        let body = {
+          serialNo: this.code
+        };
 
-          productOrderNums = localStorage.getItem("productOrderNums");
-          console.log(productOrderNums);
-          if (
-            res.data.data.productOrderNum != productOrderNums &&
-            productOrderNums !== null
-          ) {
-            this.printContent();
-            localStorage.removeItem("productOrderNums");
+        httpserver(api.getSerialNoInformation, body).then(res => {
+          console.log(res);
+          //6947463266069
+          //6944437047143
+          let resData = res.data.data;
+          console.log(resData)
+          let productOrderNums = "";
+          if (res.data.returnCode == "0") {
+            this.tableData.push(res.data.data);
+            console.log(this.sequenceCount);
+            //打印条件 数量达到||这个订单号和上一个不一样了，打印
+            let palletCount = res.data.data.trayNumber;
+            console.log(res.data.data);
+            if (this.sequenceCount == palletCount) {
+              this.printContent();
+              this.tableData = [];
+            }
+
+            productOrderNums = localStorage.getItem("productOrderNums");
+            console.log(productOrderNums);
+            if (
+              res.data.data.productOrderNum != productOrderNums &&
+              productOrderNums !== null
+            ) {
+              this.printContent();
+              localStorage.removeItem("productOrderNums");
+            }
+            localStorage.setItem(
+              "productOrderNums",
+              res.data.data.productOrderNum
+            );
+            localStorage.setItem("sequenceCount", this.sequenceCount);
+            this.sequenceCount = localStorage.getItem("sequenceCount");
+            this.sequenceCount++;
           }
-          localStorage.setItem(
-            "productOrderNums",
-            res.data.data.productOrderNum
-          );
-          localStorage.setItem("sequenceCount", this.sequenceCount);
-          this.sequenceCount = localStorage.getItem("sequenceCount");
-          this.sequenceCount++;
-        }
-      });
+        });
+      }else{
+        this.$message({
+          message: "产品序列号不能为空",
+          type: "error"
+        });
+      }
+
     },
 
     //      补打印
@@ -215,9 +224,9 @@ export default {
       };
       httpserver(api.getPalletizedRecords, body).then(response => {
         var resData = response.data.data;
+        console.log(resData)
         this.palletizedData = resData.palletizedRecords;
         this.total = resData.toalCount;
-        console.log(this.total);
       });
     },
     //查询物料

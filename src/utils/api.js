@@ -1,6 +1,6 @@
 const apiBaseUrl = 'http://10.200.188.232:8021/';
 // const apiPcsUrl = 'http://10.200.151.229:8041/pcs/';//高文龙
-const apiPcsUrl = 'http://10.200.151.229:8041/pcs/';//服务器
+const apiPcsUrl = 'http://10.200.188.232:8041/pcs/';//服务器
 const serviceModule = {
     //保存串口配置:#系统配置
     saveSystemCom: {
@@ -47,7 +47,7 @@ const serviceModule = {
         url: apiPcsUrl + 'restful/pp/validMachiningProductRecord',
         method: 'post'
     },
-    //根据产品序列号(发动机号)获取工单信息： #热试
+    //根据产品序列号(发动机号)获取工单信息： #热试 #机加下线
     getSerialNoInformation: {
         url: apiPcsUrl + 'restful/pp/getSerialNoInformation',
         method: 'get'
