@@ -12,7 +12,7 @@
                         @keyup.enter.native="onSubmit('form')"></el-input>
             </el-form-item>
             <el-form-item prop="password" :rules=rule.passwordRule>
-              <el-input v-model="form.password" placeholder="密码" icon="pad-password"
+              <el-input v-model="form.password" type="password" placeholder="密码" icon="pad-password"
                         @keyup.enter.native="onSubmit('form')"></el-input>
             </el-form-item>
             <el-form-item>
