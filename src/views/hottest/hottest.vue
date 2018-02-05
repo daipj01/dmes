@@ -166,37 +166,53 @@ export default {
     },
     //      产品序列号
     getOrderInfo() {
-      let body = {
-        serialNo: this.code
-      };
-      httpserver(api.getSerialNoInformation, body).then(res => {
-        console.log(res);
-        this.proinfo = res.data.data;
-        this.tableData.push(this.proinfo);
-      });
+      if(this.code!=''){
+        let body = {
+          serialNo: this.code
+        };
+        httpserver(api.getSerialNoInformation, body).then(res => {
+          this.proinfo = res.data.data;
+          if(this.proinfo==null){
+            this.proinfo={}
+          }
+          if(res.data.returnCode=='0'){
+            this.tableData.push(this.proinfo);
+            console.log(this.tableData)
+          }
+        });
+      }else{
+        this.$message({
+          message: "产品序列号不能为空",
+          type: "error"
+        });
+      }
+
     },
     //      物料条码
     getMaterialByCode() {
-      let body = {
-        materialCode: this.materialCode
-      };
-      httpserver(api.getMaterialByCode, body).then(res => {
-        var resData = res.data.data;
-        this.motorData.push(resData);
-      });
+      console.log(this.materialCode)
+      if(this.materialCode!==''){
+        let body = {
+          materialCode: this.materialCode
+        };
+        httpserver(api.getMaterialByCode, body).then(res => {
+          var resData = res.data.data;
+          console.log(resData)
+          if(resData!=null){
+            this.motorData.push(resData);
+          }
+        });
+      }else{
+        this.$message({
+          message: "物料号不能为空",
+          type: "error"
+        });
+      }
+
     },
     //保存发动机信息及物料信息
     saveHistoryInfo() {
-      let motorObj = {
-        //              addressHex:'',
-        ////              materialCode:'',
-        ////              motorLable:'',
-        ////              motorNumber:'',
-        //              post:0,
-        //              qty:0,
-        ////              title:'',
-        ////              workCenterCode:''
-      };
+      let motorObj = {};
       let motorArr = [];
       console.log();
       for (var i = 0; i < this.tableData.length; i++) {
@@ -220,11 +236,9 @@ export default {
       let body = {
         list: motorArr
       };
-      console.log(body);
-      console.log(this.tableData);
       httpserver(api.completeProductionOrder, body).then(res => {
-        console.log(res);
         this.tableData = [];
+        
       });
     },
     getHistoryInfo() {
