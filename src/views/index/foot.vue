@@ -52,394 +52,412 @@
   </div>
 </template>
 <script>
-  import getTime from '@/utils/timeFormat'
-  import timer from '@/utils/timerManager'
-  import httpserver from '../../utils/http.js';
-  import api from '../../utils/api.js';
-  import mqttLib from '../../utils/mqtt.js';
+import getTime from "@/utils/timeFormat";
+import timer from "@/utils/timerManager";
+import httpserver from "../../utils/http.js";
+import api from "../../utils/api.js";
+import mqttLib from "../../utils/mqtt.js";
 
-  export default {
-    data() {
-      return {
-        fullscreen: true,
-        messages: '',
-        num:0,
-        messageDialogVisible: false,
-        sysdate: '',
-        week: '',
-        systime: '',
-        isMenuShow: false,
-        wifiStatus: '0',
-        tabPosition: 'top',
-        activeNames: ['1'],
-        chooseTypeVal: 2,
-        messageData:[
-          {
-            title:'11',
-            message:'1111111',
-            status:0
-          },
-          {
-            title:'11',
-            message:'1111111',
-            status:0
-          },
-          {
-            title:'11',
-            message:'1111111',
-            status:0
-          },
-          {
-            title:'11',
-            message:'1111111',
-            status:0
-          },
-        ],
-        isHasRead:false,
-        animate:false,
-        listData: [{
-          'title': '无缝滚动第一行无1111111111111111111111111111111111111111缝滚动第一行',
-          'date': '2017-12-16'
-        }],
-
-//        connectTime:0
-      }
-    },
-    computed: {
-      time:{
-        set(val){
-          this.$store.state.timer1 = val;
+export default {
+  data() {
+    return {
+      time1:'',
+      time2:'',
+      fullscreen: true,
+      messages: "",
+      num: 0,
+      messageDialogVisible: false,
+      sysdate: "",
+      week: "",
+      systime: "",
+      isMenuShow: false,
+      wifiStatus: "0",
+      tabPosition: "top",
+      activeNames: ["1"],
+      chooseTypeVal: 2,
+      messageData: [
+        {
+          title: "11",
+          message: "1111111",
+          status: 0
         },
-        get() {
-          return this.$store.state.timer1;
+        {
+          title: "11",
+          message: "1111111",
+          status: 0
+        },
+        {
+          title: "11",
+          message: "1111111",
+          status: 0
+        },
+        {
+          title: "11",
+          message: "1111111",
+          status: 0
         }
-      },
-//     滚动条配置项
-      classOption () {
-        return {
-          step: 1, //the faster the rolling speed is faster
-          limitMoveNum: 0, //start seamless scrolling minimum data  //this.dataList.length
-          hoverStop: true, //mouse hover control is enabled
-          direction: 2, // 0 down || 1 up || 2 left || 3 right
-//          openWatch: true, //open data realTime monitoring
-//          singleHeight: 0, //one single stop height(default zero is seamless) => direction 0/1
-//          singleWidth: 0, //one single stop width(default zero is seamless) => direction 2/3
-//          waitTime: 1000 //one single data stop wait time
+      ],
+      isHasRead: false,
+      animate: false,
+      listData: [
+        {
+          title:
+            "无缝滚动第一行无1111111111111111111111111111111111111111缝滚动第一行",
+          date: "2017-12-16"
         }
-      }
-    },
-    created() {
-      let body = document.querySelector('body');
-      body.addEventListener('click', (e) => {
-        if (e.target.id !== 'ment-list') {
+      ]
+
+      //        connectTime:0
+    };
+  },
+  computed: {
+    // time:{
+    //   set(val){
+    //     this.$store.state.timer1 = val;
+    //   },
+    //   get() {
+    //     return this.$store.state.timer1;
+    //   }
+    // },
+    //     滚动条配置项
+    classOption() {
+      return {
+        step: 1, //the faster the rolling speed is faster
+        limitMoveNum: 0, //start seamless scrolling minimum data  //this.dataList.length
+        hoverStop: true, //mouse hover control is enabled
+        direction: 2 // 0 down || 1 up || 2 left || 3 right
+        //          openWatch: true, //open data realTime monitoring
+        //          singleHeight: 0, //one single stop height(default zero is seamless) => direction 0/1
+        //          singleWidth: 0, //one single stop width(default zero is seamless) => direction 2/3
+        //          waitTime: 1000 //one single data stop wait time
+      };
+    }
+  },
+  created() {
+    let body = document.querySelector("body");
+    body.addEventListener(
+      "click",
+      e => {
+        if (e.target.id !== "ment-list") {
           this.isMenuShow = false;
         }
-      }, false);
-      this.getServertime();
-      if ( this.time ) {
-        clearInterval(this.time);
-      }
-      this.gettest();
-    },
-    methods: {
-      //      全屏
-      requestFullScreen() {
-        var element = document.documentElement;
-        if (this.fullscreen == true) {
-          if (element.requestFullscreen) {
-            element.requestFullscreen();
-          } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-          } else if (element.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen();
-          } else if (element.msRequestFullscreen) {
-            element.msRequestFullscreen();
-          }
-          this.fullscreen = !this.fullscreen;
-        } else {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-          } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-          }
-          this.fullscreen = !this.fullscreen;
+      },
+      false
+    );
+    this.getServertime();
+    this.detectNetwork();
+    // this.gettest();
+  },
+  beforeDestroy () {
+    this.clear();
+  },
+  methods: {
+    //      全屏
+    requestFullScreen() {
+      var element = document.documentElement;
+      if (this.fullscreen == true) {
+        if (element.requestFullscreen) {
+          element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) {
+          element.webkitRequestFullscreen();
+        } else if (element.msRequestFullscreen) {
+          element.msRequestFullscreen();
         }
-      },
-//      菜单
-      menuClick() {
-        this.isMenuShow = !this.isMenuShow
-      },
-      getMessage() {
-        this.messageDialogVisible = true
-      },
-      gettest() {
-        this.$store.state.timer1=window.setInterval(()=>{
-        this.getServertime();
-        },20000);
-      },
-//      时间+信号
-      getServertime() {
-        let _this = this;
-       httpserver(api.getServertime)
-          .then((response) => {
-            let data = (new Date(response.data.data)).getTime();//转换为毫秒数
-            const date = getTime.gettime(data);
-            _this.sysdate = getTime.five(date);
-            _this.week = date.week;
-            window.setInterval(function () {
-              data = data + 1000
-              _this.systime = getTime.six(data)
-            }, 1000)
-          })
-      },
-      subscribe() {
-        let _this = this;
-        let topic = "/logs";
-        console.log("begin----------");
-        mqttLib.subscribe(topic, "message");
-        mqttLib.registerMessageHandler(topic, "message", function (message) {
-          _this.messages = message.payloadString;
-          console.log(_this.messages);
-        });
-      },
-      unsubscribe() {
-        console.log("close----------");
-        mqttLib.unsubscribe("/message", "message");
-      },
-      handleChange(val) {
-        let order=val[val.length-1]
-        this.messageData[order].status=1
-      },
-      haveRead(){
-        this.isHasRead=true;
-      },
-      switchPane(e){
-        this.chooseTypeVal = e === '全部' ? 2 : e === '已读' ? 1 : 0;
-      },
-      messlist2:function(list){
-        return this.messageData.filter(function(item){
-          return item.status==2
+        this.fullscreen = !this.fullscreen;
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+        this.fullscreen = !this.fullscreen;
+      }
+    },
+    //      菜单
+    menuClick() {
+      this.isMenuShow = !this.isMenuShow;
+    },
+    getMessage() {
+      this.messageDialogVisible = true;
+    },
+    //      时间+信号
+    getServertime() {
+      let _this = this;
+      httpserver(api.getServertime).then(response => {
+        let data = new Date(response.data.data).getTime(); //转换为毫秒数
+        const date = getTime.gettime(data);
+        _this.sysdate = getTime.five(date);
+        _this.week = date.week;
+        _this.time1= window.setInterval(function() {
+          data = data + 1000;
+          _this.systime = getTime.six(data);
+        }, 1000);
+      });
+    },
+    //定时检测系统是否通信正常
+    detectNetwork() {
+      this.time2 = window.setInterval(function() {
+        httpserver(api.getServertime).then(response =>{
         })
-      },
-      messlist1:function(list){
-        return this.messageData.filter(function(item){
-          return item.status==1
-        })
-      },
-      messlist0:function(list){
-        return this.messageData.filter(function(item){
-          return item.status==0
-        })
-      },
-
+      },20000)
+    },
+    //清除定时器
+    clear(){
+       clearInterval(this.time1);
+       clearInterval(this.time2);
+    },  
+    //订阅消息
+    subscribe() {
+      let _this = this;
+      let topic = "/logs";
+      console.log("begin----------");
+      mqttLib.subscribe(topic, "message");
+      mqttLib.registerMessageHandler(topic, "message", function(message) {
+        _this.messages = message.payloadString;
+        console.log(_this.messages);
+      });
+    },
+    //取消订阅
+    unsubscribe() {
+      console.log("close----------");
+      mqttLib.unsubscribe("/message", "message");
+    },
+    handleChange(val) {
+      let order = val[val.length - 1];
+      this.messageData[order].status = 1;
+    },
+    haveRead() {
+      this.isHasRead = true;
+    },
+    switchPane(e) {
+      this.chooseTypeVal = e === "全部" ? 2 : e === "已读" ? 1 : 0;
+    },
+    messlist2: function(list) {
+      return this.messageData.filter(function(item) {
+        return item.status == 2;
+      });
+    },
+    messlist1: function(list) {
+      return this.messageData.filter(function(item) {
+        return item.status == 1;
+      });
+    },
+    messlist0: function(list) {
+      return this.messageData.filter(function(item) {
+        return item.status == 0;
+      });
     }
   }
+};
 </script>
 <style lang="less">
-  #app-foot {
-    position: relative;
-    height: 88px;
-    width: 100%;
-    box-shadow: 0px -2px 5px #cdcdcd;
+#app-foot {
+  position: relative;
+  height: 88px;
+  width: 100%;
+  box-shadow: 0px -2px 5px #cdcdcd;
+  display: flex;
+  color: #101110;
+  font-weight: bold;
+  background: rgba(182, 194, 199, 0.637);
+  align-items: center;
+  .btn-list {
     display: flex;
-    color: #101110;
-    font-weight:bold;
-    background: rgba(182, 194, 199, 0.637);
-    align-items: center;
-    .btn-list {
-      display: flex;
-      flex: 1;
-    }
-    .system-info {
-      .time {
-        margin-right:10px;
-        text-align: right;
-        font-size: 16px;
-      }
-    }
-    .signal {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 2rem;
-      height: 2rem;
-      margin-right: 9rem;
-      margin-top:-2rem;
-    }
-    .success {
-      background: url("../../assets/WIFI-success.png");
-      background-size: 100% 100%;
-    }
-    .fail {
-      background: url("../../assets/WIFI-faile.png");
-      background-size: 100% 100%;
-    }
-    .el-checkbox-group label {
-      margin-left: 15px;
-    }
-    .form-content {
-      width: 100%;
-      height: 400px;
-      overflow: auto;
-      margin-bottom: 20px;
-      .btn {
-        position: absolute;
-        bottom: -10px;
-      }
-    }
-  }
-
-  .title {
     flex: 1;
   }
-
-  .foot-btn {
-    margin-left: 20px;
+  .system-info {
+    .time {
+      margin-right: 10px;
+      text-align: right;
+      font-size: 16px;
+    }
   }
-
-  .foot-btn {
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    color: #FFF;
-    border-radius: 5px;
-    font-size: 20px;
+  .signal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 9rem;
+    margin-top: -2rem;
   }
-
-  #app-foot .el-button {
-    margin-left: 3rem;
-  }
-
-  .icon-pad-menu:before {
-    content: '';
-  }
-
-  #ment-list {
-    /*background-color: red;*/
-    background-image: url("../../assets/menu.png");
+  .success {
+    background: url("../../assets/WIFI-success.png");
     background-size: 100% 100%;
   }
-
-  #nav-menu-list .bottom-con span {
-    background-image: url("../../assets/layout.png");
-
+  .fail {
+    background: url("../../assets/WIFI-faile.png");
+    background-size: 100% 100%;
   }
+  .el-checkbox-group label {
+    margin-left: 15px;
+  }
+  .form-content {
+    width: 100%;
+    height: 400px;
+    overflow: auto;
+    margin-bottom: 20px;
+    .btn {
+      position: absolute;
+      bottom: -10px;
+    }
+  }
+}
 
-  #app-foot .el-dialog {
-    height: 30rem;
-    .el-dialog__header {
-      .el-dialog__title {
-        font-family: "Bell MT";
-        font-size: 2rem;
-        color: blue;
-      }
-      height: 4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .el-dialog__body {
-      height: 10rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .message {
+.title {
+  flex: 1;
+}
+
+.foot-btn {
+  margin-left: 20px;
+}
+
+.foot-btn {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+#app-foot .el-button {
+  margin-left: 3rem;
+}
+
+.icon-pad-menu:before {
+  content: "";
+}
+
+#ment-list {
+  /*background-color: red;*/
+  background-image: url("../../assets/menu.png");
+  background-size: 100% 100%;
+}
+
+#nav-menu-list .bottom-con span {
+  background-image: url("../../assets/layout.png");
+}
+
+#app-foot .el-dialog {
+  height: 30rem;
+  .el-dialog__header {
+    .el-dialog__title {
       font-family: "Bell MT";
       font-size: 2rem;
-      color: darkred;
+      color: blue;
     }
-  }
-
-  .icon-pad-message {
-    background: url("../../assets/message.png");
-    background-size: 100% 100%;
-  }
-
-  .icon-pad-fullscreen {
-    background: url("../../assets/fullscreen.png");
-    background-size: 100% 100%;
-  }
-  .el-tabs{
-    width: 100%;
-    height: 19rem;
-  }
-  .el-tabs--border-card > .el-tabs__content{
-    max-height: 13rem;
-    overflow-y: auto;
-  }
-  .message-icon-read{
-    width: 1.5rem;
-    height: 1.5rem;
-    background: url("../../assets/notread.png");
-    background-size: 100% 100%;
-  }
-  /*ul,li,span,img{*/
-    /*margin:0;*/
-    /*padding:0;*/
-    /*!*display: flex;*!*/
-    /*box-sizing: border-box;*/
-  /*}*/
-
-  .marquee{
-    width: 100%;
-    height: 50px;
-    align-items: center;
-    color: #3A3A3A;
-    background-color: aqua;
+    height: 4rem;
     display: flex;
-    box-sizing: border-box;
-  }
-  .marquee_title{
-    padding: 0 20px;
-    height: 30px;/*关键样式*/
-    font-size: 14px;
-    border-right: 1px solid #d8d8d8;
     align-items: center;
+    justify-content: center;
   }
+  .el-dialog__body {
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .message {
+    font-family: "Bell MT";
+    font-size: 2rem;
+    color: darkred;
+  }
+}
 
-  .marquee_box{
-    display: block;
-    position: relative;
-    width: 60%;
-    height: 30px;/*关键样式*/
-    overflow: hidden;
-  }
-  .marquee_list{
-    display: block;
-    position: absolute;
-    top:0;
-    left: 0;
-    width:80%;
-  }
-  .marquee_top{transition: left 0.5s ;}/*关键样式*/
-  .marquee_list li{
-    height: 30px;/*关键样式*/
-    line-height: 30px;/*关键样式*/
-    font-size: 14px;
-    padding-left: 20px;
-    background-color: #fff;
-  }
-  .marquee_list li span{
-    padding:0 2px;
-  }
-  .red{
-    color: #FF0101;
-  }
-  .item li{
-    float: left;
-  }
-.seamless-warp{
+.icon-pad-message {
+  background: url("../../assets/message.png");
+  background-size: 100% 100%;
+}
+
+.icon-pad-fullscreen {
+  background: url("../../assets/fullscreen.png");
+  background-size: 100% 100%;
+}
+.el-tabs {
+  width: 100%;
+  height: 19rem;
+}
+.el-tabs--border-card > .el-tabs__content {
+  max-height: 13rem;
+  overflow-y: auto;
+}
+.message-icon-read {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: url("../../assets/notread.png");
+  background-size: 100% 100%;
+}
+/*ul,li,span,img{*/
+/*margin:0;*/
+/*padding:0;*/
+/*!*display: flex;*!*/
+/*box-sizing: border-box;*/
+/*}*/
+
+.marquee {
+  width: 100%;
+  height: 50px;
+  align-items: center;
+  color: #3a3a3a;
+  background-color: aqua;
+  display: flex;
+  box-sizing: border-box;
+}
+.marquee_title {
+  padding: 0 20px;
+  height: 30px; /*关键样式*/
+  font-size: 14px;
+  border-right: 1px solid #d8d8d8;
+  align-items: center;
+}
+
+.marquee_box {
+  display: block;
+  position: relative;
+  width: 60%;
+  height: 30px; /*关键样式*/
+  overflow: hidden;
+}
+.marquee_list {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80%;
+}
+.marquee_top {
+  transition: left 0.5s;
+} /*关键样式*/
+.marquee_list li {
+  height: 30px; /*关键样式*/
+  line-height: 30px; /*关键样式*/
+  font-size: 14px;
+  padding-left: 20px;
+  background-color: #fff;
+}
+.marquee_list li span {
+  padding: 0 2px;
+}
+.red {
+  color: #ff0101;
+}
+.item li {
+  float: left;
+}
+.seamless-warp {
   overflow: hidden;
   margin-right: 2rem;
   height: 3rem;
   /*font-size: 14px;*/
 }
-  .seamless-warp>div{
-    font-size: 18px;
-    line-height: 1;
-  }
+.seamless-warp > div {
+  font-size: 18px;
+  line-height: 1;
+}
 </style>

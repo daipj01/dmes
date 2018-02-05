@@ -228,7 +228,7 @@ export default {
         this.total = resData.toalCount;
       });
     },
-    openCom() {
+   openCom() {
       try {
         let _this = this;
         let port = new SerialPort(
@@ -240,9 +240,14 @@ export default {
         port.pipe(parser);
         port.open(function(error) {
           if (error) {
-            return console.log("Error opening port:", error.message);
+            console.log(error);
+            _this.$message({
+              message: "串口打开失败",
+              type: "error"
+            });
+            return console.log("Error opening port:", error);
           } else {
-            this.$message({
+            _this.$message({
               message: "串口打开成功",
               type: "success"
             });
@@ -253,12 +258,7 @@ export default {
         });
         _this.serialPort = port;
       } catch (err) {
-        // console.log(err);
-      } finally {
-        this.$message({
-          message: "串口打开失败",
-          type: "error"
-        });
+        //console.log(err);
       }
     },
     closeCom() {
@@ -268,21 +268,20 @@ export default {
           _this.serialPort.close(function(err) {
             if (err) {
               console.log(err);
+              _this.$message({
+                message: "串口关闭失败",
+                type: "error"
+              });
             } else {
-              this.$message({
+              _this.$message({
                 message: "串口关闭成功",
-                type: "sussess"
+                type: "success"
               });
             }
           });
         }
       } catch (err) {
         // console.log(err);
-      } finally {
-        this.$message({
-          message: "串口关闭失败",
-          type: "error"
-        });
       }
     },
     getSerialNoInformation() {

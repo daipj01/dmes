@@ -21,21 +21,22 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
       siteCode: JSON.parse(window.localStorage.getItem("terminal")).siteCode,
-      station: this.$store.state.station,
+      station: '',
       user: window.localStorage.getItem("userCode")
     };
   },
   created() {
-    // this.get();
+   this.getStation();
   },
   methods: {
-    // get() {
-    //   this.titless = localStorage.getItem("title");
-    // }
+    getStation(){
+      // this.station=this.$store.state.station
+    }
   }
 };
 </script>

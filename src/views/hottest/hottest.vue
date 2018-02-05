@@ -166,49 +166,47 @@ export default {
     },
     //      产品序列号
     getOrderInfo() {
-      if(this.code!=''){
+      if (this.code != "") {
         let body = {
           serialNo: this.code
         };
         httpserver(api.getSerialNoInformation, body).then(res => {
           this.proinfo = res.data.data;
-          if(this.proinfo==null){
-            this.proinfo={}
+          if (this.proinfo == null) {
+            this.proinfo = {};
           }
-          if(res.data.returnCode=='0'){
+          if (res.data.returnCode == "0") {
             this.tableData.push(this.proinfo);
-            console.log(this.tableData)
+            console.log(this.tableData);
           }
         });
-      }else{
+      } else {
         this.$message({
           message: "产品序列号不能为空",
           type: "error"
         });
       }
-
     },
     //      物料条码
     getMaterialByCode() {
-      console.log(this.materialCode)
-      if(this.materialCode!==''){
+      console.log(this.materialCode);
+      if (this.materialCode !== "") {
         let body = {
           materialCode: this.materialCode
         };
         httpserver(api.getMaterialByCode, body).then(res => {
           var resData = res.data.data;
-          console.log(resData)
-          if(resData!=null){
+          console.log(resData);
+          if (resData != null) {
             this.motorData.push(resData);
           }
         });
-      }else{
+      } else {
         this.$message({
           message: "物料号不能为空",
           type: "error"
         });
       }
-
     },
     //保存发动机信息及物料信息
     saveHistoryInfo() {
@@ -238,7 +236,6 @@ export default {
       };
       httpserver(api.completeProductionOrder, body).then(res => {
         this.tableData = [];
-        
       });
     },
     getHistoryInfo() {
@@ -268,10 +265,15 @@ export default {
         port.pipe(parser);
         port.open(function(error) {
           if (error) {
-            return console.log("Error opening port:", error.message);
+            console.log(error);
+            _this.$message({
+              message: "串口打开失败",
+              type: "error"
+            });
+            return console.log("Error opening port:", error);
           } else {
-            this.$message({
-              message: "窗口打开成功",
+            _this.$message({
+              message: "串口打开成功",
               type: "success"
             });
           }
@@ -281,12 +283,7 @@ export default {
         });
         _this.serialPort = port;
       } catch (err) {
-        // console.log(err);
-      } finally {
-        this.$message({
-          message: "串口打开失败",
-          type: "error"
-        });
+        //console.log(err);
       }
     },
     closeCom() {
@@ -296,18 +293,20 @@ export default {
           _this.serialPort.close(function(err) {
             if (err) {
               console.log(err);
+              _this.$message({
+                message: "串口关闭失败",
+                type: "error"
+              });
             } else {
-              console.log("串口关闭成功");
+              _this.$message({
+                message: "串口关闭成功",
+                type: "success"
+              });
             }
           });
         }
       } catch (err) {
         // console.log(err);
-      } finally {
-        this.$message({
-          message: "窗口关闭失败",
-          type: "error"
-        });
       }
     }
   }
