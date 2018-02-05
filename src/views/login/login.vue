@@ -49,8 +49,7 @@ export default {
           let _this = this;
           httpserver(api.logIn, _this.form).then(response => {
             console.log(response);
-            sessionStorage.setItem("userCode", _this.form.userCode);
-            sessionStorage.setItem("password", _this.form.password);
+            window.localStorage.setItem("userCode", _this.form.userCode);
             var menulist = JSON.stringify(response.data.data.menus);
             window.localStorage.setItem("list", menulist);
             window.localStorage.setItem(

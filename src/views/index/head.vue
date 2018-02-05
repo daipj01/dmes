@@ -1,29 +1,46 @@
 <template>
-<div id="app-head">
-       <img src="../../assets/logo.png">
-       <img src="../../assets/evun_logo.png"/>
+<div class="app-head">
+       <!-- <img src="../../assets/logo.png">
+       <img src="../../assets/evun_logo.png"/> -->
+       <el-row :gutter="20">
+  <el-col :span="8">
+    <label>当前工厂</label>
+    <div class="site">{{siteCode}}</div>
+  </el-col>
+  <el-col :span="8">
+<label>当前站点</label>
+<div>{{station}}</div>
+  </el-col>
+  <el-col :span="8">
+<label>当前用户</label>
+<div>{{user}}</div>
+  </el-col>
+</el-row>
 </div>
+
 </template>
 
 <script>
 export default {
   data() {
     return {
-      titless: ""
+      siteCode: JSON.parse(window.localStorage.getItem("terminal")).siteCode,
+      station: this.$store.state.station,
+      user: window.localStorage.getItem("userCode")
     };
   },
   created() {
-    this.get();
+    // this.get();
   },
   methods: {
-    get() {
-      this.titless = localStorage.getItem("title");
-    }
+    // get() {
+    //   this.titless = localStorage.getItem("title");
+    // }
   }
 };
 </script>
 <style lang="less" >
-#app-head {
+.app-head {
   height: 80px;
   width: 100%;
   background: rgba(3, 53, 77, 0.637);
@@ -31,17 +48,26 @@ export default {
   display: flex;
   align-items: center;
   color: #fff;
-  img:nth-child(1){
-    padding: 0 20px;
-    display: inline-block;
-    vertical-align: middle;
+  // img:nth-child(1) {
+  //   margin-top: -2rem;
+  //   margin-left: 1rem;
+  //   display: inline-block;
+  //   vertical-align: middle;
+  // }
+  // img:nth-child(2) {
+  //   margin-top: -2rem;
+  //   margin-left: 730px;
+  //   display: inline-block;
+  //   vertical-align: middle;
+  // }
+  .el-row {
+    color: rgb(108, 216, 7);
+    margin-top: 40px;
+    height: 40px;
+    width: 100%;
+    .el-col {
+      height: 40px;
+    }
   }
-  img:nth-child(2){
-    padding: 0 700px;
-    display: inline-block;
-    vertical-align: middle;
-  }
- 
 }
-
 </style>

@@ -9,12 +9,11 @@ util.jsonToFormData = function (json) {
 };
 
 util.sessionClean = function () {
-    sessionStorage.removeItem('userCode');
-    sessionStorage.removeItem('password');
     window.localStorage.removeItem('list');
     window.localStorage.removeItem('terminal');
     window.localStorage.removeItem('serialPort');
     window.localStorage.removeItem('sessionId');
     window.localStorage.removeItem('title');
+    window.localStorage.removeItem('userCode');
 };
 export default util;

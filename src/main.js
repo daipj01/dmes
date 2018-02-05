@@ -5,7 +5,7 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import '../theme/index.css'
-import store from './store'
+import store from './vuex/store'
 import UI from './components/ui';
 import scroll from 'vue-seamless-scroll'
 Vue.use(scroll)
