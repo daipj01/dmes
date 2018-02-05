@@ -146,6 +146,7 @@ export default {
   methods: {
     getHistoryInfo() {
       this.isHistory = true;
+      //防止两个弹框冲突
       if (this.isHistory == true) {
         this.dialogTableVisible = true;
       }
@@ -156,12 +157,11 @@ export default {
         pageSize: "1"
       };
       httpserver(api.getHistoryInfo, body).then(response => {
-        console.log(response);
         let resData = response.data.data;
         this.gridData = resData.productionStnRecords;
       });
     },
-    //      根据序列号工单信息查询
+    // 根据序列号查询
     getOrderInfo() {
       if(this.code!=''){
         let body = {
@@ -169,25 +169,22 @@ export default {
         };
 
         httpserver(api.getSerialNoInformation, body).then(res => {
-          console.log(res);
           //6947463266069
           //6944437047143
           let resData = res.data.data;
-          console.log(resData)
           let productOrderNums = "";
           if (res.data.returnCode == "0") {
-            this.tableData.push(res.data.data);
+
             console.log(this.sequenceCount);
             //打印条件 数量达到||这个订单号和上一个不一样了，打印
             let palletCount = res.data.data.trayNumber;
-            console.log(res.data.data);
             if (this.sequenceCount == palletCount) {
               this.printContent();
               this.tableData = [];
             }
-
+            this.tableData.push(res.data.data);
             productOrderNums = localStorage.getItem("productOrderNums");
-            console.log(productOrderNums);
+            //订单进入到下一个打印前一个订单
             if (
               res.data.data.productOrderNum != productOrderNums &&
               productOrderNums !== null
@@ -224,7 +221,6 @@ export default {
       };
       httpserver(api.getPalletizedRecords, body).then(response => {
         var resData = response.data.data;
-        console.log(resData)
         this.palletizedData = resData.palletizedRecords;
         this.total = resData.toalCount;
       });
@@ -241,10 +237,9 @@ export default {
         var resData = response.data.data;
         this.palletizedData = resData.palletizedRecords;
         this.total = resData.toalCount;
-        console.log(response);
       });
     },
-    //      调用打印机接口
+    // 调用打印机接口
     printContent(e) {
       let subOutputRankPrint = document.getElementById("subOutputRank-print");
       console.log(subOutputRankPrint.innerHTML);
