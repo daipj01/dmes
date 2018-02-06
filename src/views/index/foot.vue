@@ -61,8 +61,8 @@ import mqttLib from "../../utils/mqtt.js";
 export default {
   data() {
     return {
-      time1:'',
-      time2:'',
+      time1: "",
+      time2: "",
       fullscreen: true,
       messages: "",
       num: 0,
@@ -148,7 +148,7 @@ export default {
     this.detectNetwork();
     // this.gettest();
   },
-  beforeDestroy () {
+  beforeDestroy() {
     this.clear();
   },
   methods: {
@@ -192,24 +192,29 @@ export default {
         const date = getTime.gettime(data);
         _this.sysdate = getTime.five(date);
         _this.week = date.week;
-        _this.time1= window.setInterval(function() {
+        _this.time1 = window.setInterval(function() {
           data = data + 1000;
           _this.systime = getTime.six(data);
         }, 1000);
       });
     },
-    //定时检测系统是否通信正常
+    //定时检测系统是否通信正常刷新日期
     detectNetwork() {
       this.time2 = window.setInterval(function() {
-        httpserver(api.getServertime).then(response =>{
-        })
-      },20000)
+        let _this = this;
+        httpserver(api.getServertime).then(response => {
+          let data = new Date(response.data.data).getTime(); //转换为毫秒数
+          const date = getTime.gettime(data);
+          _this.sysdate = getTime.five(date);
+          _this.week = date.week;
+        });
+      }, 20000);
     },
     //清除定时器
-    clear(){
-       clearInterval(this.time1);
-       clearInterval(this.time2);
-    },  
+    clear() {
+      clearInterval(this.time1);
+      clearInterval(this.time2);
+    },
     //订阅消息
     subscribe() {
       let _this = this;
