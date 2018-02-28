@@ -15,7 +15,7 @@ const en = {
     'cn':'Chinese',
     'en':'English',
     'fix':'Fix',
-    'scanned':'ScannedNum',
+    'scanned':'Scanned',
     'portconfiguration':'Port Configuration',
     'port':'Port',
     'portdes':'Please select port',
@@ -35,7 +35,15 @@ const en = {
     'cancle':'Cancle',
     'productSerial':'ProductSerial',
     'quantity':'Quantity',
-    'remarks':'Remarks'
+    'remarks':'Remarks',
+    'homepage':'Please contact with admin to set the home page!',
+    'printup':'PrintUp',
+    'printbarcode':'PrintBarcode',
+    'barcode':'Barcode',
+    'fittedtime':'FittedTime',
+    'offlinetime':'OfflineTime',
+    'partbarcode':'PartCode'
+    
   },
   ...enLocale
 }

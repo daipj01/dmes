@@ -1,6 +1,6 @@
 <template>
   <div class="aaa">
-    <div class="bbb">请联系管理员，设置首页！</div>
+    <div class="bbb">{{$t('message.homepage')}}</div>
   </div>
 </template>
 

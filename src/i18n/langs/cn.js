@@ -35,7 +35,14 @@ const cn = {
     'cancle':'取消',
     'productSerial':'产品序列号',
     'quantity':'数量',
-    'remarks':'备注'
+    'remarks':'备注',
+    'homepage':'请联系管理员，设置首页!',
+    'printup':'补打印',
+    'printbarcode':'托条码打印',
+    'barcode':'托条码',
+    'fittedtime':'装托时间',
+    'offlinetime':'下线时间',
+    'partbarcode':'零件条码'
   },
   ...zhLocale
 }

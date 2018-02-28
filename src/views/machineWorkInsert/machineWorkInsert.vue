@@ -49,15 +49,13 @@
     <div class="history-info">
       <el-dialog  :visible.sync="dialogTableVisible" width="80%">
         <el-table :data="gridData" style="width: 100%">
-          <el-table-column type="index" label="序号" width="100">
+          <el-table-column prop="materialCode" :label="$t('message.materialCode')">
           </el-table-column>
-          <el-table-column prop="materialCode" label="物料编号">
+          <el-table-column prop="materialText" :label="$t('message.materialText')">
           </el-table-column>
-          <el-table-column prop="materialText" label="物料描述">
+          <el-table-column prop="quanlity" :label="$t('message.productSerial')">
           </el-table-column>
-          <el-table-column prop="quanlity" label="产品序列号">
-          </el-table-column>
-          <el-table-column prop="orderNo" label="下线时间">
+          <el-table-column prop="orderNo" :label="$t('message.offlinetime')">
           </el-table-column>
         </el-table>
         <el-pagination
@@ -72,24 +70,24 @@
     </div>
 
     <!--托条码打印弹出窗口-->
-    <el-dialog  :visible.sync="dialogVisible" width="80%" title="托条码补打印">
+    <el-dialog  :visible.sync="dialogVisible" width="80%" :title="$t('message.printbarcode')">
       <div class="linear-input">
-        <span>托条码</span>
-        <el-input v-model="pallinfo" placeholder="请输入内容" width="300"></el-input>
-        <el-button type="primary" @click="collectPall()">确认</el-button>
+        <span>{{$t('message.barcode')}}</span>
+        <el-input v-model="pallinfo" width="300"></el-input>
+        <el-button type="primary" @click="collectPall()">{{$t('message.fix')}}</el-button>
       </div>
       <el-table :data="palletizedData">
         <el-table-column
           type="selection"
           width="42">
         </el-table-column>
-        <el-table-column  prop="palletBarCode" label="托条码" width="100">
+        <el-table-column  prop="palletBarCode" :label="$t('message.barcode')" width="100">
         </el-table-column>
-        <el-table-column prop="materialCode" label="物料编号">
+        <el-table-column prop="materialCode" :label="$t('message.materialCode')">
         </el-table-column>
-        <el-table-column prop="materialText" label="物料描述">
+        <el-table-column prop="materialText" :label="$t('message.materialText')">
         </el-table-column>
-        <el-table-column prop="roundtripTime" label="装托时间">
+        <el-table-column prop="roundtripTime" :label="$t('message.fittedtime')">
         </el-table-column>
       </el-table>
       <!--<el-button type="primary">主要按钮</el-button>-->
@@ -106,7 +104,7 @@
 
 
     <div class="icon-pad-history" @click="getHistoryInfo()"></div>
-    <div class="icon-pad-save" @click="replenishPrint()">补打印</div>
+    <div class="icon-pad-save" @click="replenishPrint()">{{$t('message.printup')}}</div>
     <!--<div class="fixed-box">-->
       <!--<span @click="getHistoryInfo()">历史记录</span>-->
       <!--<span @click="replenishPrint()">补打印</span>-->
