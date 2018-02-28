@@ -200,8 +200,11 @@ export default {
     },
     //定时检测系统是否通信正常
     detectNetwork() {
+       let _this = this;
       this.time2 = window.setInterval(function() {
         httpserver(api.getServertime).then(response => {
+           let data = new Date(response.data.data).getTime(); //转换为毫秒数
+        const date = getTime.gettime(data);
           _this.sysdate = getTime.five(date);
           _this.week = date.week;
         });

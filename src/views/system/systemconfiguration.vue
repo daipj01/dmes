@@ -2,14 +2,14 @@
   <div class="systemConfiguration">
     <el-container>
       <el-header>
-        串口设置
+        {{$t('message.portconfiguration')}}
       </el-header>
       <el-main>
         <el-form ref="form" :model="form">
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="端口" prop="port" :rules=rule.port>
-                <el-select prop="port" v-model="form.port" placeholder="请选择端口">
+              <el-form-item :label="$t('message.port')" prop="port" :rules=rule.port>
+                <el-select prop="port" v-model="form.port" :placeholder="$t('message.portdes')" >
                   <el-option label="COM1" value="COM1"></el-option>
                   <el-option label="COM2" value="COM2"></el-option>
                   <el-option label="COM3" value="COM3"></el-option>
@@ -20,8 +20,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="波特率" prop="baudRate" :rules=rule.baudRate>
-                <el-select v-model="form.baudRate" placeholder="请选择波特率">
+              <el-form-item :label="$t('message.baudRate')" prop="baudRate" :rules=rule.baudRate>
+                <el-select v-model="form.baudRate" :placeholder="$t('message.baudRatedes')">
                   <el-option label="300" value="300"></el-option>
                   <el-option label="600" value="600"></el-option>
                   <el-option label="1200" value="1200"></el-option>
@@ -40,14 +40,14 @@
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="数据位" prop="dataBit" :rules=rule.dataBit>
-                <el-input v-model="form.dataBit" placeholder="请输入数据位">
+              <el-form-item :label="$t('message.dataBit')" prop="dataBit" :rules=rule.dataBit>
+                <el-input v-model="form.dataBit" :placeholder="$t('message.dataBitdes')">
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="校验位" prop="checkBit" :rules=rule.checkBit>
-                <el-select v-model="form.checkBit" placeholder="请选择校验位">
+              <el-form-item :label="$t('message.checkBit')" prop="checkBit" :rules=rule.checkBit>
+                <el-select v-model="form.checkBit" :placeholder="$t('message.checkBitdes')">
                   <el-option label="None" value=""></el-option>
                   <el-option label="1" value="1"></el-option>
                 </el-select>
@@ -56,25 +56,25 @@
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="停止位" prop="stopBit" :rules=rule.stopBit>
-                <el-select v-model="form.stopBit" placeholder="请选择停止位">
+              <el-form-item :label="$t('message.stopBit')" prop="stopBit" :rules=rule.stopBit>
+                <el-select v-model="form.stopBit" :placeholder="$t('message.stopBitdes')">
                   <el-option label="1" value="1"></el-option>
                   <el-option label="2" value="2"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="是否生效" prop="enable" :rules=rule.enable>
-                <el-select v-model="form.enable" placeholder="是否生效">
-                  <el-option label="是" value="1"></el-option>
-                  <el-option label="否" value="0"></el-option>
+              <el-form-item :label="$t('message.iseffective')" prop="enable" :rules=rule.enable>
+                <el-select v-model="form.enable" :placeholder="$t('message.iseffectivedes')">
+                  <el-option :label="$t('message.yes')" value="1"></el-option>
+                  <el-option :label="$t('message.no')" value="0"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit('form')">保存</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="onSubmit('form')">{{$t('message.save')}}</el-button>
+            <el-button>{{$t('message.cancle')}}</el-button>
           </el-form-item>
         </el-form>
       </el-main>

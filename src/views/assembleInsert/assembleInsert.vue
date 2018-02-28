@@ -2,13 +2,13 @@
   <div class="assembleInsert">
     <div class="convent">
       <div class="convent-input">
-        <span style="width: 8rem;font-size: 1.4rem;font-weight: bold;color:#000000">发动机号</span>
+        <span style="width: 8rem;font-size: 1.4rem;font-weight: bold;color:#000000">{{$t('message.serialNo')}}</span>
         <el-input :autosize="{ minRows: 4, maxRows: 4}" size="80" @keyup.enter.native="show($event)" v-model="code">
 
         </el-input>
-        <el-button type="primary" @click="getSerialNoInformation()">确定</el-button>
+        <el-button type="primary" @click="getSerialNoInformation()">{{$t('message.fix')}}</el-button>
       </div>
-      <el-button type="success">已扫数量：{{productCount}}</el-button>
+      <el-button type="success">{{$t('message.scanned')}}:{{productCount}}</el-button>
     </div>
     <div class="topbox">
       <el-container>
@@ -17,31 +17,31 @@
               <div>
                 <el-row :gutter="20">
                   <el-col :span="12">
-                    <label class="label">订单编号</label>
+                    <label class="label">{{$t('message.productOrderNum')}}</label>
                     <div class="detail">{{gridData.productOrderNum}}</div>
                   </el-col>
                   <el-col :span="12">
-                    <label class="label">工单编号</label>
+                    <label class="label">{{$t('message.productionOrderNum')}}</label>
                     <div class="detail">{{gridData.productionOrderNum}}</div>
                   </el-col>
                 </el-row>
                 <el-row :gutter="20">
                   <el-col :span="24">
-                    <label class="label">发动机号</label>
+                    <label class="label">{{$t('message.serialNo')}}</label>
                     <div class="detail">{{gridData.serialNo}}</div>
                   </el-col>
                 </el-row>
                 <el-row :gutter="20">
                   <el-col :span="8">
-                    <label class="label">产品描述</label>
+                    <label class="label">{{$t('message.materialText')}}</label>
                     <div class="detail">{{gridData.materialText}}</div>
                   </el-col>
                   <el-col :span="8">
-                    <label class="label">产品编号</label>
+                    <label class="label">{{$t('message.materialCode')}}</label>
                     <div class="detail">{{gridData.materialCode}}</div>
                   </el-col>
                   <el-col :span="8">
-                    <label class="label">机型</label>
+                    <label class="label">{{$t('message.productModel')}}</label>
                     <div class="detail">{{gridData.productModel}}</div>
                   </el-col>
                 </el-row>

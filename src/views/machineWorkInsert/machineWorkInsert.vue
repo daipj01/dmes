@@ -2,10 +2,10 @@
   <div class="macheineWorkInsert">
     <div class="convent">
       <div class="convent-input">
-        <span style="width: 11rem;font-size: 1.4rem;color: rgb(0, 0, 0);font-weight: bold;">产品序列号</span>
+        <span style="width: 11rem;font-size: 1.4rem;color: rgb(0, 0, 0);font-weight: bold;">{{$t('message.productSerial')}}</span>
         <el-input  :autosize="{ minRows: 4, maxRows: 4}" size="80" @keyup.enter.native="show($event)" v-model="code">
         </el-input>
-        <el-button type="primary" @click="getOrderInfo()">确定</el-button>
+        <el-button type="primary" @click="getOrderInfo()">{{$t('message.fix')}}</el-button>
       </div>
     </div>
     <div class="bottom-form" style="margin-top: 1rem;">
@@ -14,33 +14,33 @@
           :data="tableData"
           border
           style="width: 100%;font-size: 1.2rem;max-height: 500px">
-          <el-table-column
+          <!-- <el-table-column
             label="序号"
             type="index"
             width="100">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="productionOrderNum"
-            label="工单编号"
-            width="180">
+            :label="$t('message.productionOrderNum')" 
+            width="250">
           </el-table-column>
           <el-table-column
             width="150"
-            prop="materialCode"
-            label="物料编号">
+            :label="$t('message.materialCode')"
+           >
           </el-table-column>
           <el-table-column
             prop="serialNo"
-            width="240"
-            label="产品序列号">
+            width="280"
+           :label="$t('message.productSerial')">
           </el-table-column>
           <el-table-column
             prop=""
-            label="数量">
+            :label="$t('message.quantity')">
           </el-table-column>
           <el-table-column
             prop=""
-            label="备注">
+            :label="$t('message.remarks')">
           </el-table-column>
         </el-table>
       </div>

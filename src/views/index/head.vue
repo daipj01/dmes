@@ -2,40 +2,48 @@
 <div class="app-head">
        <!-- <img src="../../assets/logo.png">
        <img src="../../assets/evun_logo.png"/> -->
-       <el-row :gutter="20">
+  <el-row :gutter="20">
   <el-col :span="8">
-    <label>当前工厂</label>
+    <label>{{$t('message.currentSite')}}</label>
     <div class="site">{{siteCode}}</div>
   </el-col>
   <el-col :span="8">
-<label>当前站点</label>
+<label>{{$t('message.currentStation')}}</label>
 <div>{{station}}</div>
   </el-col>
   <el-col :span="8">
-<label>当前用户</label>
+<label>{{$t('message.currentUser')}}</label>
 <div>{{user}}</div>
   </el-col>
 </el-row>
+<el-button type="primary" @click="switchChinese()">{{$t('message.cn')}}</el-button>
+    <el-button type="primary" @click="switchEnlish()">{{$t('message.en')}}</el-button>
 </div>
 
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
       siteCode: JSON.parse(window.localStorage.getItem("terminal")).siteCode,
-      station: '',
+      station: "",
       user: window.localStorage.getItem("userCode")
     };
   },
   created() {
-   this.getStation();
+    this.getStation();
   },
   methods: {
-    getStation(){
+    getStation() {
       // this.station=this.$store.state.station
+    },
+     switchChinese () {
+      this.$i18n.locale = 'cn'
+    },
+    switchEnlish () {
+      this.$i18n.locale = 'en'
     }
   }
 };

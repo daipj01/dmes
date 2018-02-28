@@ -6,37 +6,37 @@
       <div class="right-container">
       <el-row :gutter="20">
                   <el-col :span="12">
-                    <label class="label">工单编号</label>
+                    <label class="label">{{$t('message.productionOrderNum')}}</label>
                     <div class="detail">{{proinfo.productionOrderNum}}</div>
                   </el-col>
                   <el-col :span="12">
-                    <label class="label">机型</label>
+                    <label class="label">{{$t('message.productModel')}}</label>
                     <div class="detail">{{proinfo.productModel}}</div>
                   </el-col>
                 </el-row>
                 <el-row :gutter="20">
                   <el-col :span="12">
-                    <label class="label">物料编号</label>
+                    <label class="label">{{$t('message.materialCode')}}</label>
                     <div class="detail">{{proinfo.materialCode}}</div>
                   </el-col>
                   <el-col :span="12">
-                    <label class="label">订单编号</label>
+                    <label class="label">{{$t('message.productOrderNum')}}</label>
                     <div class="detail">{{proinfo.productOrderNum}}</div>
                   </el-col>
                 </el-row>
                 <el-row :gutter="20">
                   <el-col :span="12">
-                    <label class="label">计划数量</label>
+                    <label class="label">{{$t('message.plannedQuantity')}}</label>
                     <div class="detail">{{proinfo.plannedQuantity}}</div>
                   </el-col>
                   <el-col :span="12">
-                    <label class="label">顺序号</label>
+                    <label class="label">{{$t('message.orderNo')}}</label>
                     <div class="detail">{{proinfo.orderNo}}</div>
                   </el-col>
                 </el-row>
                  <el-row :gutter="20">
                   <el-col :span="24">
-                    <label class="label">发动机号</label>
+                    <label class="label">{{$t('message.serialNo')}}</label>
                     <div class="detail">{{proinfo.serialNo}}</div>
                   </el-col>
                 </el-row>
@@ -59,15 +59,15 @@
 </div>
 <div class="bottom-form">
   <el-table :data="tableData" style="width:100%">
-    <el-table-column prop="productOrderNum" label="订单编号" width="230">
+    <el-table-column prop="productOrderNum"  :label="$t('message.productOrderNum')" width="225">
         </el-table-column>
-        <el-table-column prop="productionOrderNum" label="工单编号" width="230">
+        <el-table-column prop="productionOrderNum" :label="$t('message.productionOrderNum')"  width="245">
         </el-table-column>
-        <el-table-column prop="materialCode" label="物料编码" width="140">
+        <el-table-column prop="materialCode" :label="$t('message.materialCode')" width="140">
         </el-table-column>
-        <el-table-column prop="orderNo" label="顺序号" width="260">
+        <el-table-column prop="orderNo" :label="$t('message.orderNo')" width="260">
         </el-table-column>
-        <el-table-column prop="plannedQty" label="计划数量" width="162">
+        <el-table-column prop="plannedQty" :label="$t('message.plannedQuantity')" width="162">
         </el-table-column>
   </el-table>
 </div>
@@ -75,19 +75,19 @@
     </div>
     <el-dialog :visible.sync="dialogTableVisible" width="80%">
       <el-table :data="gridData">
-        <el-table-column prop="productOrderNum" label="订单编号">
+        <el-table-column prop="productOrderNum" :label="$t('message.productOrderNum')">
         </el-table-column>
-        <el-table-column prop="productionOrderNum" label="工单编号">
+        <el-table-column prop="productionOrderNum" :label="$t('message.productionOrderNum')">
         </el-table-column>
-        <el-table-column prop="productModel" label="机型">
+        <el-table-column prop="productModel" :label="$t('message.productModel')">
         </el-table-column>
-        <el-table-column prop="materialCode" label="物料编码">
+        <el-table-column prop="materialCode" :label="$t('message.materialCode')">
         </el-table-column>
-        <el-table-column prop="materialText" label="物料描述">
+        <el-table-column prop="materialText" :label="$t('message.materialText')">
         </el-table-column>
-        <el-table-column prop="quanlity" label="计划数量">
+        <el-table-column prop="quanlity" :label="$t('message.plannedQuantity')">
         </el-table-column>
-        <el-table-column prop="orderNo" label="顺序号">
+        <el-table-column prop="orderNo" :label="$t('message.orderNo')">
         </el-table-column>
       </el-table>
       <el-pagination
