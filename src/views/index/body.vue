@@ -20,7 +20,8 @@ export default {
   	width:100%;
   	height:100%;
   	background: #ededed;
-  	overflow:hidden;
+  	/*overflow:hidden;*/
+    margin: 8px;
   }
 
 </style>

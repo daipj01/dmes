@@ -4,7 +4,10 @@
       <div class="user-info">
         <div class="image">
         </div>
-        <span>{{userName}}</span>
+        <span>{{user}}</span>
+        <span>|</span>
+        <span v-on:click="quit()">退出登录</span>
+
       </div>
       <ul>
         <li v-for="(item,index) in MenuListData" @click="getTitle(index)" ref='menuTitle'>
@@ -13,12 +16,12 @@
           </router-link>
         </li>
       </ul>
-      <button class="bottom-con">
-        <div v-on:click="quit()" style="display: flex">
-          <span class="el-icon-pad-off"></span>
-          退出登录
-        </div>
-      </button>
+      <!--<button class="bottom-con">-->
+        <!--<div v-on:click="quit()" style="display: flex">-->
+          <!--<span class="el-icon-pad-off"></span>-->
+          <!--退出登录-->
+        <!--</div>-->
+      <!--</button>-->
     </div>
   </transition>
 
@@ -32,19 +35,20 @@
   export default {
     name: 'navlist',
     props: ['isMenuShow'],
-    userName: '',
     computed: {
       MenuListData() {
         let obj = JSON.parse(localStorage.getItem("list"));
         return obj
       }
     },
+
     created() {
       this.userinfo();
     },
     data() {
       return {
         showColor: true,
+        user: window.localStorage.getItem("userCode"),
       };
     },
     methods: {

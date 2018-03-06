@@ -2,33 +2,29 @@
   <div class="assembleInsert">
     <div class="convent">
       <div class="convent-input">
-        <span style="width: 8rem;font-size: 1.4rem;font-weight: bold;color:#000000">{{$t('message.serialNo')}}</span>
+        <span style="width: 8rem;font-size: 1.4rem;color: #595959;margin-right: 1rem">{{$t('message.serialNo')}}</span>
         <el-input :autosize="{ minRows: 4, maxRows: 4}" size="80" @keyup.enter.native="show($event)" v-model="code">
-
+          <template slot="append" @click="getSerialNoInformation()">{{$t('message.fix')}}</template>
         </el-input>
-        <el-button type="primary" @click="getSerialNoInformation()">{{$t('message.fix')}}</el-button>
       </div>
-      <el-button type="success">{{$t('message.scanned')}}:{{productCount}}</el-button>
+      <div class="counts">
+        <span style="font-size: 18px;color: #515152;vertical-align: middle;float:left;margin-left: 1.5rem;">{{$t('message.scanned')}}</span>
+        <span style="font-size: 36px;color: #00AFEB;vertical-align: middle;float: left;margin-left:10px;">{{productCount}}</span>
+      </div>
     </div>
     <div class="topbox">
       <el-container>
         <el-aside width="60%">
-                    <div class="right-container">
+          <div class="right-container">
               <div>
                 <el-row :gutter="20">
-                  <el-col :span="12">
+                  <el-col :span="14">
                     <label class="label">{{$t('message.productOrderNum')}}</label>
                     <div class="detail">{{gridData.productOrderNum}}</div>
                   </el-col>
-                  <el-col :span="12">
+                  <el-col :span="10">
                     <label class="label">{{$t('message.productionOrderNum')}}</label>
                     <div class="detail">{{gridData.productionOrderNum}}</div>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="20">
-                  <el-col :span="24">
-                    <label class="label">{{$t('message.serialNo')}}</label>
-                    <div class="detail">{{gridData.serialNo}}</div>
                   </el-col>
                 </el-row>
                 <el-row :gutter="20">
@@ -43,6 +39,12 @@
                   <el-col :span="8">
                     <label class="label">{{$t('message.productModel')}}</label>
                     <div class="detail">{{gridData.productModel}}</div>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="24">
+                    <label class="label">{{$t('message.serialNo')}}</label>
+                    <div class="detail">{{gridData.serialNo}}</div>
                   </el-col>
                 </el-row>
               </div>
@@ -96,9 +98,9 @@
       </el-dialog>
     </div>
 
-    <div class="bottom-box">
-      <div id="ishotTest">需要热试</div>
-    </div>
+    <!--<div class="bottom-box">-->
+      <!--<div id="ishotTest">需要热试</div>-->
+    <!--</div>-->
   </div>
 </template>
 

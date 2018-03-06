@@ -2,11 +2,11 @@
 <template>
   <div id="app-foot">
     <div class="btn-list">
-      <div class="foot-btn f-cp icon-pad-menu" id="ment-list" v-on:click="menuClick()" style="color:#fff;">
+      <div class="foot-btn f-cp icon-pad-menu" id="ment-list" v-on:click="menuClick()" :class="isActive1?'blue':'dark'">
       </div>
-        <div class="foot-btn f-cp icon-pad-message" v-on:click="getMessage()">
+        <div class="foot-btn f-cp icon-pad-message" v-on:click="getMessage()" :class="isActive2?'blue':'dark'">
         </div>
-      <div class="foot-btn f-cp icon-pad-fullscreen" v-on:click="requestFullScreen()">
+      <div class="foot-btn f-cp icon-pad-fullscreen" v-on:click="requestFullScreen()" :class="isActive3?'blue':'dark'">
       </div>
       <!--后台、mqtt推送的消息-->
       <el-dialog  :visible.sync="messageDialogVisible" width="80%" center>
@@ -44,9 +44,9 @@
         <div>{{systime}}</div>
         <div>{{sysdate}}/{{week}}</div>
       </div>
-        <div class="signal" :class="wifiStatus=='0'?'success':'fail'">
+      <div class="signal" :class="wifiStatus=='0'?'success':'fail'">
 
-        </div>
+      </div>
     </div>
     <navlist :isMenuShow='isMenuShow'></navlist>
   </div>
@@ -75,6 +75,9 @@ export default {
       tabPosition: "top",
       activeNames: ["1"],
       chooseTypeVal: 2,
+      isActive1:true,
+      isActive2:false,
+      isActive3:false,
       messageData: [
         {
           title: "11",
@@ -111,25 +114,12 @@ export default {
     };
   },
   computed: {
-    // time:{
-    //   set(val){
-    //     this.$store.state.timer1 = val;
-    //   },
-    //   get() {
-    //     return this.$store.state.timer1;
-    //   }
-    // },
-    //     滚动条配置项
     classOption() {
       return {
         step: 1, //the faster the rolling speed is faster
         limitMoveNum: 0, //start seamless scrolling minimum data  //this.dataList.length
         hoverStop: true, //mouse hover control is enabled
         direction: 2 // 0 down || 1 up || 2 left || 3 right
-        //          openWatch: true, //open data realTime monitoring
-        //          singleHeight: 0, //one single stop height(default zero is seamless) => direction 0/1
-        //          singleWidth: 0, //one single stop width(default zero is seamless) => direction 2/3
-        //          waitTime: 1000 //one single data stop wait time
       };
     }
   },
@@ -176,13 +166,22 @@ export default {
         }
         this.fullscreen = !this.fullscreen;
       }
+      this.isActive1 = false;
+      this.isActive2 = false;
+      this.isActive3 = true;
     },
     //      菜单
     menuClick() {
       this.isMenuShow = !this.isMenuShow;
+      this.isActive1 = true;
+      this.isActive2 = false;
+      this.isActive3 = false;
     },
     getMessage() {
       this.messageDialogVisible = true;
+      this.isActive1 = false;
+      this.isActive2 = true;
+      this.isActive3 = false;
     },
     //      时间+信号
     getServertime() {
@@ -255,20 +254,25 @@ export default {
       return this.messageData.filter(function(item) {
         return item.status == 0;
       });
+    },
+//    切换颜色
+    changeColor(){
+
     }
+
   }
 };
 </script>
 <style lang="less">
 #app-foot {
   position: relative;
-  height: 88px;
+  height: 5rem;
   width: 100%;
   box-shadow: 0px -2px 5px #cdcdcd;
   display: flex;
   color: #101110;
   font-weight: bold;
-  background: rgba(182, 194, 199, 0.637);
+  background: #fff;
   align-items: center;
   .btn-list {
     display: flex;
@@ -291,7 +295,7 @@ export default {
     margin-top: -2rem;
   }
   .success {
-    background: url("../../assets/WIFI-success.png");
+    background: url("../../assets/wifi.png");
     background-size: 100% 100%;
   }
   .fail {
@@ -340,9 +344,13 @@ export default {
 }
 
 #ment-list {
-  /*background-color: red;*/
-  background-image: url("../../assets/menu.png");
-  background-size: 100% 100%;
+  /*background-color: #0067B2;*/
+  background-image: url("../../assets/menulist.png");
+  background-size: 65% 65%;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+
 }
 
 #nav-menu-list .bottom-con span {
@@ -376,13 +384,17 @@ export default {
 }
 
 .icon-pad-message {
-  background: url("../../assets/message.png");
-  background-size: 100% 100%;
+  background: url("../../assets/message1.png");
+  background-size: 65% 65%;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .icon-pad-fullscreen {
-  background: url("../../assets/fullscreen.png");
-  background-size: 100% 100%;
+  background: url("../../assets/fullscreen1.png");
+  background-size: 65% 65%;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 .el-tabs {
   width: 100%;
@@ -465,4 +477,10 @@ export default {
   font-size: 18px;
   line-height: 1;
 }
+.blue{
+  background-color: #0067B2;
+}
+  .dark{
+    background-color: #717F9F;
+  }
 </style>

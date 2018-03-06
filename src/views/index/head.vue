@@ -1,23 +1,45 @@
 <template>
+
 <div class="app-head">
-       <!-- <img src="../../assets/logo.png">
-       <img src="../../assets/evun_logo.png"/> -->
-  <el-row :gutter="20">
-  <el-col :span="8">
-    <label>{{$t('message.currentSite')}}</label>
+  <div class="soft-icon">
+    DMES-Client
+  </div>
+  <div class="interval">
+    -
+  </div>
+  <div class="projectActive" v-if="title==''">
+    {{menuText}}
+  </div>
+  <div class="projectActive" v-else="title!==''">
+    {{title}}
+  </div>
+  <div class="sitecode">
+    <div class="site-pic"></div>
     <div class="site">{{siteCode}}</div>
-  </el-col>
-  <el-col :span="8">
-<label>{{$t('message.currentStation')}}</label>
-<div>{{station}}</div>
-  </el-col>
-  <el-col :span="8">
-<label>{{$t('message.currentUser')}}</label>
-<div>{{user}}</div>
-  </el-col>
-</el-row>
-<el-button type="primary" @click="switchChinese()">{{$t('message.cn')}}</el-button>
-    <el-button type="primary" @click="switchEnlish()">{{$t('message.en')}}</el-button>
+  </div>
+  <div class="usercode">
+    <div class="user-pic"></div>
+    <div class="user">{{user}}</div>
+  </div>
+
+       <!--&lt;!&ndash; <img src="../../assets/logo.png">-->
+       <!--<img src="../../assets/evun_logo.png"/> &ndash;&gt;-->
+  <!--<el-row :gutter="20">-->
+  <!--<el-col :span="8">-->
+    <!--<label>{{$t('message.currentSite')}}</label>-->
+    <!--<div class="site">{{siteCode}}</div>-->
+  <!--</el-col>-->
+  <!--<el-col :span="8">-->
+<!--<label>{{$t('message.currentStation')}}</label>-->
+<!--<div>{{station}}</div>-->
+  <!--</el-col>-->
+  <!--<el-col :span="8">-->
+<!--<label>{{$t('message.currentUser')}}</label>-->
+<!--<div>{{user}}</div>-->
+  <!--</el-col>-->
+<!--</el-row>-->
+<!--<el-button type="primary" @click="switchChinese()">{{$t('message.cn')}}</el-button>-->
+    <!--<el-button type="primary" @click="switchEnlish()">{{$t('message.en')}}</el-button>-->
 </div>
 
 </template>
@@ -29,11 +51,18 @@ export default {
     return {
       siteCode: JSON.parse(window.localStorage.getItem("terminal")).siteCode,
       station: "",
-      user: window.localStorage.getItem("userCode")
+      user: window.localStorage.getItem("userCode"),
+      menuText:''
     };
+  },
+  computed: {
+    title () {
+      return this.$store.state.title
+    }
   },
   created() {
     this.getStation();
+    this.getMenuTexts();
   },
   methods: {
     getStation() {
@@ -44,39 +73,76 @@ export default {
     },
     switchEnlish () {
       this.$i18n.locale = 'en'
+    },
+    getMenuTexts(){
+      this.menuText = window.localStorage.getItem("title")
+      console.log(this.menuText)
     }
+
   }
 };
 </script>
 <style lang="less" >
 .app-head {
-  height: 80px;
+  height: 3.33rem;
   width: 100%;
-  background: rgba(3, 53, 77, 0.637);
-  box-shadow: 0px 1px 4px #ff5000;
+  background: #2C619A 100%;
+  /*box-shadow: 0px 1px 4px #ff5000;*/
   display: flex;
   align-items: center;
+  position: relative;
   color: #fff;
-  // img:nth-child(1) {
-  //   margin-top: -2rem;
-  //   margin-left: 1rem;
-  //   display: inline-block;
-  //   vertical-align: middle;
-  // }
-  // img:nth-child(2) {
-  //   margin-top: -2rem;
-  //   margin-left: 730px;
-  //   display: inline-block;
-  //   vertical-align: middle;
-  // }
-  .el-row {
-    color: rgb(108, 216, 7);
-    margin-top: 40px;
-    height: 40px;
-    width: 100%;
-    .el-col {
-      height: 40px;
-    }
+  .soft-icon{
+    font-family: EuropeCond-Bold-Italic;
+    font-size: 1.6rem;
+    color: #FFFFFF;
+    margin-left: 24px;
+  }
+  .interval{
+    margin-left: .5rem;
+    margin-right: .5rem;
+  }
+  .projectActive{
+    font-size: 1.2rem;
+  }
+  .sitecode {
+    position: absolute;
+    right: 130px;
+    width: 70px;
+    height: 25px;
+    display: flex;
+    position:;
+    align-items: center;
+
+.site-pic {
+  background: url("../../assets/factory.png");
+  width: 17px;
+  height: 17px;
+  margin-right: 8px;
+}
+
+.site {
+  font-size: 1.2rem;
+}
+
+}
+  .usercode{
+    position: absolute;
+    right: 24px;
+    width: 80px;
+    height: 25px;
+    display: flex;
+    position: ;
+    align-items: center;
+  .user-pic{
+    background: url("../../assets/user.png");
+    width: 17px;
+    height: 17px;
+    margin-right: 8px;
+  }
+  .user{
+    font-size: 1.2rem;
+  }
   }
 }
 </style>

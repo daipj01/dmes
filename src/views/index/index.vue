@@ -2,7 +2,7 @@
   <div class="hello-pad" @click="closeMenu">
     <app-head></app-head>
    <app-body class="content">
-    </app-body> 
+    </app-body>
    <app-foot @changeNavMenu=""></app-foot>
   </div>
 </template>
@@ -42,9 +42,10 @@ export default {
   flex-direction: column;
   height: 100%;
   width: 100%;
+  background-color: #EDEDED;
   overflow: hidden;
   .content {
-    height:600px;
+    height:619px;
     flex: 1;
     display: flex;
   }

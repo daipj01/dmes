@@ -58,17 +58,15 @@
   </el-container>
 </div>
 <div class="bottom-form">
-  <el-table :data="tableData" style="width:100%">
-    <el-table-column prop="productOrderNum"  :label="$t('message.productOrderNum')" width="225">
-        </el-table-column>
-        <el-table-column prop="productionOrderNum" :label="$t('message.productionOrderNum')"  width="245">
-        </el-table-column>
-        <el-table-column prop="materialCode" :label="$t('message.materialCode')" width="140">
-        </el-table-column>
-        <el-table-column prop="orderNo" :label="$t('message.orderNo')" width="260">
-        </el-table-column>
-        <el-table-column prop="plannedQty" :label="$t('message.plannedQuantity')" width="162">
-        </el-table-column>
+  <el-table :data="tableData" style="width:100%" border>
+    <el-table-column prop="productOrderNum"  :label="$t('message.productOrderNum')" width="246"></el-table-column>
+    <el-table-column prop="plannedQty" :label="$t('message.plannedQuantity')" width="136"></el-table-column>
+    <el-table-column prop="productionOrderNum" :label="$t('message.productionOrderNum')"  width="223">
+    </el-table-column>
+    <el-table-column prop="materialCode" :label="$t('message.materialCode')" width="223">
+    </el-table-column>
+    <el-table-column prop="orderNo" :label="$t('message.orderNo')" width="136">
+    </el-table-column>
   </el-table>
 </div>
  <div class="icon-pad-history" @click="getHistoryInfo()">
